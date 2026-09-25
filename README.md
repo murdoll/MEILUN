@@ -1,27 +1,27 @@
 # MEILUN
 
-AI-ассистент нового поколения с 6 функциями, 9 языками и голосовым помощником Luni.
+Next-generation AI assistant with 6 functions, 9 languages, and voice avatar Luni.
 
-## Сайт
+## Website
 
 https://meilun.de5.net
 
-## Возможности
+## Features
 
-- Чат с AI (GPT-OSS 120B, Qwen, Groq)
-- Генерация фото (Agnes, 15 стилей)
-- Генератор идей
-- Помощник в учёбе (TOEFL, IELTS, SAT, GMAT, GRE, CSCA)
-- Генератор кода (15 языков)
-- Практика языков (9 языков + свои слова)
-- Голосовой помощник Luni
+- AI Chat (GPT-OSS 120B, Qwen, Groq)
+- Photo Generation (Agnes, 15 styles)
+- Idea Generator
+- Study Assistant (TOEFL, IELTS, SAT, GMAT, GRE, CSCA)
+- Code Generator (15 languages)
+- Language Practice (9 languages + custom words)
+- Voice Assistant Luni
 
-## Технологии
+## Tech Stack
 
 - HTML / CSS / JavaScript
-- Node.js (прокси)
+- Node.js (proxy)
 - Groq + Agnes (AI)
-- Supabase (auth + лимиты)
+- Supabase (auth + limits)
 - Nginx + Cloudflare + Let's Encrypt
 
 ---
