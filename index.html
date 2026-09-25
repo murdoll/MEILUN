@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://meilun.de5.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' https://meilun.de5.net https://mnyqoglsmfcyukyiotqh.supabase.co wss://mnyqoglsmfcyukyiotqh.supabase.co; frame-src https://tally.so; object-src 'none'; base-uri 'self';">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>MEILUN — AI Assistant</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Georgia',serif;background:#0d0d1a;color:#fff;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 70%,rgba(124,58,237,0.12) 0%,rgba(13,13,26,0) 60%),radial-gradient(ellipse at 70% 30%,rgba(167,139,250,0.06) 0%,rgba(13,13,26,0) 50%);filter:blur(80px);z-index:-1;pointer-events:none}
+.container{max-width:1400px;margin:0 auto;padding:0 clamp(14px,3vw,32px);position:relative;z-index:1}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.04);position:sticky;top:0;background:rgba(13,13,26,0.88);backdrop-filter:blur(20px);z-index:100;flex-wrap:wrap;gap:6px}
+.logo{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:300;letter-spacing:3px;color:#fff;cursor:pointer;background:0;border:0}
+svg.icon-spark{width:1em;height:1em;display:inline-block;vertical-align:middle;color:#a78bfa}
+.icon-inline{width:16px;height:16px;display:inline-block;vertical-align:middle;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn-icon{background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:9px 12px;color:#a78bfa;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:0.2s}
+.btn-icon:hover{background:rgba(124,58,237,0.12)}
+.logo .icon{color:#a78bfa;font-size:26px}
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.nav button{color:rgba(255,255,255,0.4);background:0;border:0;font-size:10px;letter-spacing:1px;cursor:pointer;padding:4px 0;transition:0.3s;font-family:'Georgia',serif}
+.nav button:hover,.nav button:focus-visible{color:#a78bfa;outline:none}
+.nav .btn-outline{border:1px solid rgba(255,255,255,0.08);padding:4px 12px;border-radius:20px;color:#fff;background:0;font-size:10px}
+.nav .btn-outline:hover{background:rgba(124,58,237,0.12);border-color:#7c3aed}
+.nav .btn-primary-nav{background:#7c3aed;border:0;padding:4px 14px;border-radius:20px;color:#fff;font-size:10px}
+.nav .btn-primary-nav:hover{background:#6d28d9}
+.page{display:none;padding:20px 0;min-height:70vh}
+.page.active{display:block;animation:pageFade 0.35s ease}
+@keyframes pageFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+:focus-visible{outline:2px solid #a78bfa;outline-offset:2px;border-radius:4px}
+.chat-area .typing{animation:typingPulse 1.4s ease-in-out infinite}
+@keyframes typingPulse{0%,100%{opacity:0.2}50%{opacity:0.6}}
+.feature-card,.plan-card,.profile-card{transition:transform 0.25s ease,box-shadow 0.25s ease,background 0.25s ease,border-color 0.25s ease}
+.feature-card:hover{box-shadow:0 8px 24px rgba(124,58,237,0.15)}
+.plan-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.1)}
+::selection{background:rgba(124,58,237,0.35);color:#fff}
+.page h2{font-size:26px;font-weight:300;letter-spacing:2px;margin-bottom:4px;color:#fff}
+.page .sub{color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:14px}
+.btn-primary{background:#7c3aed;color:#fff;border:0;padding:10px 20px;border-radius:24px;font-size:13px;cursor:pointer;transition:0.3s;letter-spacing:1px;font-family:'Georgia',serif}
+.btn-primary:hover{background:#6d28d9;transform:scale(1.02)}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none}
+.btn-secondary{background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06);padding:10px 20px;border-radius:24px;font-size:13px;cursor:pointer;transition:0.3s;letter-spacing:1px;font-family:'Georgia',serif}
+.btn-secondary:hover{background:rgba(255,255,255,0.06)}
+.btn-back{background:0;border:0;color:#a78bfa;font-size:20px;cursor:pointer;padding:4px 8px}
+.btn-back:hover{color:#fff}
+.luni-container{display:flex;justify-content:flex-start;align-items:center;padding:6px 0 14px;gap:16px;flex-wrap:wrap;transition:all 0.8s ease}
+.luni-container.familiar{justify-content:flex-start;padding:4px 0 8px;gap:8px;transform:translate(-6px,4px)}
+.luni-aura{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.2) 0%,rgba(124,58,237,0.05) 60%,transparent 80%);animation:pulse 2.5s ease-in-out infinite;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;cursor:pointer;margin-left:20px;margin-top:10px;transition:all 0.8s ease;border:0}
+.luni-container.familiar .luni-aura{width:70px;height:70px;margin-left:0;margin-top:0}
+.luni-aura .luni-icon{font-size:40px;color:#a78bfa;transition:all 0.8s ease}
+.luni-container.familiar .luni-aura .luni-icon{font-size:28px}
+.luni-aura .luni-ring{position:absolute;width:130px;height:130px;border-radius:50%;border:1px solid rgba(124,58,237,0.15);animation:spin 8s linear infinite}
+.luni-aura .luni-ring:nth-child(2){width:155px;height:155px;animation-duration:12s;animation-direction:reverse;border-color:rgba(124,58,237,0.08)}
+.luni-container.familiar .luni-aura .luni-ring{width:95px;height:95px}
+.luni-container.familiar .luni-aura .luni-ring:nth-child(2){width:115px;height:115px}
+.luni-aura.speaking{animation-duration:0.8s;box-shadow:0 0 50px rgba(124,58,237,0.5)}
+.luni-label{color:rgba(255,255,255,0.3);font-size:10px;letter-spacing:2px;margin-top:4px;text-align:center;flex:1;cursor:pointer}
+.luni-wrapper{display:flex;flex-direction:column;align-items:center;flex:1}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.7}50%{transform:scale(1.06);opacity:1}}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.glow-btn{position:relative;background:linear-gradient(135deg,#7c3aed,#a78bfa,#7c3aed);background-size:300% 300%;animation:glowMove 3s ease-in-out infinite;border:0;padding:10px 20px;border-radius:24px;color:#fff;font-size:13px;cursor:pointer;transition:0.3s;letter-spacing:1px;overflow:hidden;font-family:'Georgia',serif}
+.glow-btn::after{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border-radius:26px;background:linear-gradient(45deg,#7c3aed,#a78bfa,#7c3aed,#a78bfa);background-size:300% 300%;animation:glowBorder 4s linear infinite;z-index:-1}
+.glow-btn:hover{transform:scale(1.03)}
+@keyframes glowMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes glowBorder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:20px 0 30px;align-items:center}
+.hero-left .badge{display:inline-block;background:rgba(124,58,237,0.12);color:#a78bfa;padding:4px 14px;border-radius:16px;font-size:9px;letter-spacing:3px;margin-bottom:12px}
+.hero-left h1{font-size:42px;font-weight:300;line-height:1.1;letter-spacing:2px;margin-bottom:6px}
+.hero-left h1 span{color:#a78bfa}
+.hero-left .quote{font-size:15px;color:rgba(255,255,255,0.25);font-style:italic;letter-spacing:1px;margin-bottom:12px}
+.hero-left p{font-size:14px;color:rgba(255,255,255,0.35);line-height:1.8;max-width:400px;margin-bottom:20px}
+.hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.hero-right{display:flex;justify-content:center;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px 0;border-top:1px solid rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.03);margin-bottom:24px}
+.stat-item{text-align:center}
+.stat-item .number{font-size:24px;font-weight:300;color:#a78bfa}
+.stat-item .label{font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;margin-top:4px}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.feature-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);border-radius:14px;padding:18px 12px;text-align:center;transition:0.3s;cursor:pointer;color:inherit;font-family:'Georgia',serif}
+.feature-card:hover,.feature-card:focus-visible{background:rgba(255,255,255,0.04);border-color:rgba(124,58,237,0.15);transform:translateY(-3px);outline:none}
+.feature-card .fi{font-size:22px;color:#a78bfa;display:block;margin-bottom:4px}
+.feature-card .fname{font-size:12px;color:rgba(255,255,255,0.6);letter-spacing:1px}
+.models-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.model-chip{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:6px 14px;border-radius:16px;font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.model-chip.active{background:rgba(124,58,237,0.2);color:#a78bfa;border-color:#7c3aed}
+.chat-area{background:rgba(255,255,255,0.02);border-radius:14px;padding:14px;min-height:80px;max-height:300px;overflow-y:auto;border:1px solid rgba(255,255,255,0.03);margin-bottom:10px;font-size:13px;line-height:1.6}
+.chat-area .label{font-size:9px;opacity:0.3;margin-right:6px;cursor:pointer}
+.chat-area .msg{position:relative;padding:8px 12px;margin-bottom:4px;border-radius:8px;word-wrap:break-word;cursor:pointer;transition:0.2s}
+.chat-area .msg:hover{background:rgba(255,255,255,0.03)}
+.chat-area .msg .copy-hint{font-size:9px;opacity:0;transition:0.2s;display:block;text-align:right;color:rgba(255,255,255,0.15)}
+.chat-area .msg:hover .copy-hint{opacity:1}
+.chat-area .typing{color:rgba(255,255,255,0.2);font-style:italic;padding:8px 12px}
+.chat-area .msg.user{background:rgba(124,58,237,0.1);border-left:2px solid #7c3aed}
+.chat-area .msg.ai{background:rgba(255,255,255,0.02);border-left:2px solid rgba(255,255,255,0.05)}
+.chat-area .msg.error{background:rgba(244,67,54,0.08);border-left:2px solid #f44336}
+.input-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.input-row input{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:20px;padding:10px 16px;color:#fff;font-size:13px;outline:0;min-width:120px;font-family:'Georgia',serif}
+.input-row input:focus{border-color:#7c3aed}
+.input-row input::placeholder{color:rgba(255,255,255,0.15)}
+.input-row button{background:#7c3aed;border:0;border-radius:20px;padding:10px 20px;color:#fff;font-size:15px;cursor:pointer;transition:0.3s}
+.input-row button:hover{background:#6d28d9}
+.input-row button:disabled{opacity:0.3;cursor:not-allowed}
+.lang-btn,.model-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.3);padding:3px 10px;border-radius:12px;font-size:9px;cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.lang-btn.active,.model-btn.active{background:rgba(124,58,237,0.2);color:#a78bfa;border-color:#7c3aed}
+.plan-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:16px;padding:20px;text-align:center;flex:1;min-width:180px}
+.plan-card:hover{background:rgba(255,255,255,0.04);border-color:rgba(124,58,237,0.15)}
+.plan-card .price{font-size:26px;font-weight:300;color:#a78bfa;margin:6px 0}
+.plan-card .plan-name{font-size:15px;letter-spacing:2px;color:#fff}
+.plan-card ul{list-style:none;padding:0;margin:10px 0}
+.plan-card li{font-size:11px;color:rgba(255,255,255,0.3);padding:3px 0}
+.plans-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.input-group{display:flex;flex-direction:column;gap:16px;max-width:340px;margin-top:24px}
+.input-group label{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block}
+.input-group input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;color:#fff;font-size:16px;outline:0;height:56px;transition:0.3s;font-family:'Georgia',serif}
+.input-group input:focus{border-color:#7c3aed;background:rgba(124,58,237,0.05)}
+.input-group input::placeholder{color:rgba(255,255,255,0.2)}
+.input-group .btn-primary{width:100%;height:56px;font-size:16px;margin-top:8px}
+.input-group .forgot-link{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px}
+.input-group .forgot-link a{color:#a78bfa;text-decoration:none;cursor:pointer}
+.input-group .error-msg{font-size:10px;color:#f44336;margin-top:-8px}
+.input-group .link-bottom{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin-top:16px}
+.input-group .link-bottom a{color:#a78bfa;text-decoration:none;cursor:pointer}
+.input-group .small-note{font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px}
+.styles-grid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.style-chip{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:5px 12px;border-radius:16px;font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.style-chip.active{background:rgba(124,58,237,0.2);color:#a78bfa;border-color:#7c3aed}
+.chips-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.chip{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:5px 14px;border-radius:16px;font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.chip.active{background:rgba(124,58,237,0.2);color:#a78bfa;border-color:#7c3aed}
+.sub-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.sub-chip{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);padding:4px 12px;border-radius:12px;font-size:10px;color:rgba(255,255,255,0.3);cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.sub-chip.active{background:rgba(124,58,237,0.15);color:#a78bfa;border-color:#7c3aed}
+textarea{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px;color:#fff;font-size:13px;min-height:80px;resize:vertical;outline:0;font-family:'Georgia',serif}
+textarea:focus{border-color:#7c3aed}
+footer{border-top:1px solid rgba(255,255,255,0.03);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+footer span,footer button,footer a{font-size:11px;color:rgba(255,255,255,0.12);text-decoration:none}
+footer button{background:0;border:0;cursor:pointer;font-family:'Georgia',serif}
+footer a:hover{color:rgba(255,255,255,0.25)}
+.profile-card{display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(124,58,237,0.02));border:1px solid rgba(124,58,237,0.12);border-radius:20px;padding:22px;margin-top:8px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:400;color:#fff;flex-shrink:0}
+.profile-card-info{display:flex;flex-direction:column;gap:4px}
+.profile-name{font-size:19px;color:#fff;font-weight:400}
+.profile-email{font-size:12px;color:rgba(255,255,255,0.35)}
+.profile-plan-badge{display:inline-block;margin-top:4px;background:rgba(124,58,237,0.18);color:#a78bfa;font-size:10px;letter-spacing:1px;padding:3px 12px;border-radius:12px;width:fit-content}
+.profile-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.profile-stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);border-radius:14px;padding:14px 8px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.profile-stat-num{color:#a78bfa;font-size:22px;font-weight:300}
+.profile-stat-label{color:rgba(255,255,255,0.25);font-size:9px;letter-spacing:1px}
+.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.copy-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(124,58,237,0.9);color:#fff;padding:10px 24px;border-radius:12px;font-size:13px;z-index:1000;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.copy-toast.show{opacity:1}
+.feedback-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:999;display:none;justify-content:center;align-items:center;padding:20px}
+.feedback-overlay.show{display:flex}
+.feedback-overlay .modal{background:#1a1a2e;border-radius:24px;padding:30px;max-width:600px;width:100%;border:1px solid rgba(255,255,255,0.05);max-height:90vh;overflow-y:auto}
+.feedback-overlay .modal .close{float:right;background:0;border:0;color:#a78bfa;font-size:24px;cursor:pointer}
+.feedback-overlay .modal iframe{width:100%;height:600px;border:0;border-radius:12px}
+.word-add-area{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+.word-add-area input{flex:1;min-width:100px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:10px 12px;color:#fff;font-size:13px;outline:0;font-family:'Georgia',serif}
+.word-add-area input::placeholder{color:rgba(255,255,255,0.15)}
+.word-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:200px;overflow-y:auto}
+.word-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.02);border-radius:8px;padding:6px 12px;font-size:13px;color:rgba(255,255,255,0.6)}
+.word-item .del{color:#f44336;cursor:pointer;font-size:14px;background:0;border:0}
+.word-item .del:hover{color:#ff6b6b}
+.quick-links{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 8px}
+.quick-links .ql-item{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);border-radius:20px;padding:4px 12px;font-size:10px;color:rgba(255,255,255,0.2);cursor:pointer;transition:0.3s;font-family:'Georgia',serif}
+.quick-links .ql-item:hover{color:#a78bfa;border-color:rgba(124,58,237,0.2)}
+.store-badge{display:inline-block;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:20px;padding:4px 14px;font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:1px;margin-top:4px}
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;border-top:1px solid rgba(255,255,255,0.05);padding:16px 20px;z-index:9999;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(255,255,255,0.6);backdrop-filter:blur(10px);transition:transform 0.3s}
+.cookie-banner.hidden{transform:translateY(100%)}
+.cookie-banner a{color:#a78bfa;text-decoration:none}
+.cookie-banner .btn-accept{background:#7c3aed;color:#fff;border:0;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Georgia',serif;font-size:13px}
+.cookie-banner .btn-decline{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.05);padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Georgia',serif;font-size:13px}
+.char-count{font-size:9px;color:rgba(255,255,255,0.15);text-align:right;margin-top:-6px}
+@media(min-width:1600px){.container{max-width:1600px}}
+@media(max-width:1200px) and (min-width:1025px){.container{padding:0 24px}.hero{gap:28px}}
+@media(max-width:1024px){.hero{grid-template-columns:1fr;text-align:center;padding:20px 0}.hero-left p{max-width:100%;margin-left:auto;margin-right:auto}.hero-buttons{justify-content:center}.quick-links{justify-content:center}.stats{grid-template-columns:repeat(4,1fr)}.features-grid{grid-template-columns:repeat(3,1fr)}.luni-container{justify-content:center}.luni-aura{margin-left:0;margin-top:0}.profile-stats-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:840px){.stats{grid-template-columns:repeat(2,1fr)}.features-grid{grid-template-columns:repeat(2,1fr)}.plans-row{flex-wrap:wrap}.plan-card{min-width:220px}}
+@media(max-width:600px){.header{flex-wrap:wrap;gap:6px;padding:12px 0}.nav{gap:8px;width:100%;justify-content:space-between}.hero-left h1{font-size:clamp(24px,7vw,32px)}.features-grid{grid-template-columns:1fr 1fr}.plans-row{flex-direction:column}.feedback-overlay .modal{padding:16px;margin:10px}.luni-aura{width:80px;height:80px}.luni-aura .luni-ring{width:105px;height:105px}.luni-aura .luni-ring:nth-child(2){width:125px;height:125px}.page{padding:14px 0}.page h2{font-size:22px}.btn-primary,.btn-secondary{font-size:12px;padding:8px 16px}.input-group{max-width:100%}.profile-stats-grid{grid-template-columns:repeat(2,1fr)}.profile-card{padding:16px;gap:14px}.profile-avatar{width:56px;height:56px;font-size:22px}}
+@media(max-width:380px){.nav button{font-size:9px}.hero-left h1{font-size:22px}.features-grid{grid-template-columns:1fr}}
+@media(hover:none) and (pointer:coarse){.feature-card,.chip,.style-chip,.sub-chip,.model-chip,.lang-btn{min-height:36px}.btn-primary,.btn-secondary,.glow-btn{min-height:44px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="header">
+<button class="logo" onclick="showPage('home')" aria-label="MEILUN home"><span class="icon"><svg class="icon-spark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z" fill="currentColor"/></svg></span> MEILUN</button>
+<nav class="nav" id="mainNav">
+<button onclick="showPage('home')" data-key="home">Home</button>
+<button onclick="showPage('features')" data-key="features">Features</button>
+<button onclick="showPage('profile')" data-key="profile">Profile</button>
+<button onclick="showPage('subscription')" data-key="plans">Plans</button>
+<button class="btn-outline" onclick="showPage('login')" data-key="login" id="navSignIn">Sign In</button>
+<button class="btn-primary-nav" onclick="showPage('register')" data-key="start" id="navGetStarted">Get Started</button>
+</nav>
+</header>
+<section class="page active" id="page-home">
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px;justify-content:center;">
+<div style="display:flex;gap:4px;flex-wrap:wrap;" id="langButtonsTop"></div>
+</div>
+
+<div class="hero">
+<div class="hero-left">
+<span class="badge" data-key="badge">COMING 2027</span>
+<h1>Where <span data-key="intelligence">intelligence</span> meets <span data-key="intuition">intuition</span></h1>
+<div class="quote" data-key="quote">"The AI that listens before you speak"</div>
+<p data-key="heroDesc">6 powerful functions, 9 languages, voice recognition, and avatar Luni. MEILUN is your intelligent companion for work, study, and creativity.</p>
+<div class="hero-buttons">
+<button class="btn-primary" onclick="scrollToChat()" data-key="try">Try MEILUN</button>
+<button class="btn-secondary" onclick="showPage('features')" data-key="learn">Learn More</button>
+</div>
+<div class="quick-links">
+<button class="ql-item" onclick="showPage('about')" data-key="aboutTitle">About</button>
+<button class="ql-item" onclick="showPage('voice')" data-key="voice">Voice</button>
+<button class="ql-item" onclick="showPage('ideas')" data-key="f1">Ideas</button>
+<button class="ql-item" onclick="showPage('photo')" data-key="f2">Photo</button>
+<button class="ql-item" onclick="showPage('study')" data-key="f3">Study</button>
+<button class="ql-item" onclick="showPage('code')" data-key="f4">Code</button>
+<button class="ql-item" onclick="showPage('languages')" data-key="f5">Languages</button>
+<button class="ql-item" onclick="showPage('translator')" data-key="f6">Translator</button>
+</div>
+<div class="store-badge">App Store & Google Play — 2027</div>
+</div>
+<div class="hero-right"></div>
+</div>
+
+<div class="luni-container" id="luniContainer">
+<div class="luni-wrapper">
+<span class="luni-label" id="luniLabel" data-key="tapToSpeak">Tap to speak</span>
+</div>
+<button class="luni-aura" id="luniAura" onclick="startListening()" aria-label="Talk to Luni">
+<div class="luni-ring"></div>
+<div class="luni-ring"></div>
+<span class="luni-icon"><svg class="icon-spark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z" fill="currentColor"/></svg></span>
+</button>
+</div>
+
+<div class="stats">
+<div class="stat-item"><div class="number">6</div><div class="label" data-key="stat1">Functions</div></div>
+<div class="stat-item"><div class="number">9</div><div class="label" data-key="stat2">Languages</div></div>
+<div class="stat-item"><div class="number">24/7</div><div class="label" data-key="stat3">Availability</div></div>
+<div class="stat-item"><div class="number">∞</div><div class="label" data-key="stat4">Possibilities</div></div>
+</div>
+
+<div style="margin:8px 0 12px;">
+<span style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;" data-key="chooseModel">Choose AI Model</span>
+<div class="models-row" id="modelRow"></div>
+</div>
+
+<div style="margin:8px 0 12px;">
+<span style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;" data-key="features">Features</span>
+<div class="features-grid" id="featuresGrid">
+<button class="feature-card" onclick="showFeature('ideas')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.3v.2h6v-.2c0-.9.4-1.7 1-2.3A6 6 0 0 0 12 3z"/></svg></span><div class="fname" data-key="f1">Idea Generator</div></button>
+<button class="feature-card" onclick="showFeature('photo')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L4 19"/></svg></span><div class="fname" data-key="f2">Photo Generator</div></button>
+<button class="feature-card" onclick="showFeature('study')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15"/></svg></span><div class="fname" data-key="f3">Study Assistant</div></button>
+<button class="feature-card" onclick="showFeature('code')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg></span><div class="fname" data-key="f4">Code Generator</div></button>
+<button class="feature-card" onclick="showFeature('languages')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><div class="fname" data-key="f5">Language Practice</div></button>
+<button class="feature-card" onclick="showFeature('translator')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M4 7h9M8 4v3c0 4-1 7-4 9M6 12c1.5 2 4 3 7 3M13 21l4-9 4 9M14.5 18h5"/></svg></span><div class="fname" data-key="f6">Translator</div></button>
+</div>
+</div>
+
+<div id="chatSection" style="margin-top:12px;padding:16px;background:rgba(255,255,255,0.01);border-radius:16px;border:1px solid rgba(255,255,255,0.03);">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+<span style="font-size:10px;color:#a78bfa;letter-spacing:2px;" data-key="tryChat">CHAT</span>
+<div style="display:flex;gap:4px;flex-wrap:wrap;" id="langButtons"></div>
+</div>
+<div class="chat-area" id="chatArea" role="log" aria-live="polite"><div class="msg ai"><span class="label">AI</span><span data-key="aiHello">Hello! Ask me anything.</span></div></div>
+<div id="chatImagePreview" style="display:none;margin-bottom:6px;"></div>
+<div class="input-row">
+<input type="text" id="chatInput" placeholder="Type a message..." data-key="chatPlaceholder" maxlength="1000" autocomplete="off" />
+<button type="button" onclick="startListenInto('chatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 14px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+<button type="button" onclick="document.getElementById('chatImageFile').click()" aria-label="Attach image" title="Attach image" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 14px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg></button>
+<input type="file" id="chatImageFile" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="handleChatImageSelect(event)" />
+<button id="sendBtn" aria-label="Send"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button>
+<button onclick="clearChat('chatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
+</div>
+</section>
+<section class="page" id="page-features">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="featuresTitle">Features</h2>
+<p class="sub" data-key="featuresSub">Explore all 6 core functions of MEILUN</p>
+<div class="features-grid" style="grid-template-columns:repeat(3,1fr);">
+<button class="feature-card" onclick="showFeature('ideas')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.3v.2h6v-.2c0-.9.4-1.7 1-2.3A6 6 0 0 0 12 3z"/></svg></span><div class="fname" data-key="f1">Idea Generator</div></button>
+<button class="feature-card" onclick="showFeature('photo')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L4 19"/></svg></span><div class="fname" data-key="f2">Photo Generator</div></button>
+<button class="feature-card" onclick="showFeature('study')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15"/></svg></span><div class="fname" data-key="f3">Study Assistant</div></button>
+<button class="feature-card" onclick="showFeature('code')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg></span><div class="fname" data-key="f4">Code Generator</div></button>
+<button class="feature-card" onclick="showFeature('languages')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><div class="fname" data-key="f5">Language Practice</div></button>
+<button class="feature-card" onclick="showFeature('translator')"><span class="fi"><svg class="icon-inline" style="width:22px;height:22px;" viewBox="0 0 24 24"><path d="M4 7h9M8 4v3c0 4-1 7-4 9M6 12c1.5 2 4 3 7 3M13 21l4-9 4 9M14.5 18h5"/></svg></span><div class="fname" data-key="f6">Translator</div></button>
+</div>
+</section>
+
+<section class="page" id="page-profile">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="profileTitle">Profile</h2>
+<p class="sub" data-key="profileSub">Your personal dashboard</p>
+
+<div class="profile-card">
+<div class="profile-avatar" id="profileAvatar">G</div>
+<div class="profile-card-info">
+<p class="profile-name" id="profileName">Guest</p>
+<p class="profile-email" id="profileEmail" data-key="notSigned">Not signed in</p>
+<span class="profile-plan-badge" id="profilePlanBadge" data-key="planFree">Free</span>
+</div>
+</div>
+
+<div class="profile-stats-grid">
+<div class="profile-stat"><span class="profile-stat-num" id="statMessages">0</span><span class="profile-stat-label" data-key="messagesCount">messages</span></div>
+<div class="profile-stat"><span class="profile-stat-num" id="statGenerations">0</span><span class="profile-stat-label" data-key="generationsCount">generations</span></div>
+<div class="profile-stat"><span class="profile-stat-num" id="statWords">0</span><span class="profile-stat-label" data-key="wordsLearned">words learned</span></div>
+<div class="profile-stat"><span class="profile-stat-num" id="statDate">—</span><span class="profile-stat-label" data-key="registerDate">registered</span></div>
+</div>
+
+<div class="profile-actions">
+<button class="btn-primary" onclick="showPage('login')" data-key="signInBtn" id="profileSignInBtn">Sign In</button>
+<button class="btn-secondary" onclick="showPage('subscription')" data-key="profileManagePlan" id="profileManagePlanBtn" style="display:none;">Manage plan</button>
+<button class="btn-secondary" onclick="handleLogout()" data-key="logoutBtn" id="logoutBtn" style="display:none;">Logout</button>
+</div>
+</section>
+
+<section class="page" id="page-subscription">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="plansTitle">Subscription Plans</h2>
+<p class="sub" data-key="plansSub">Choose the plan that fits your needs</p>
+<div class="plans-row">
+<div class="plan-card"><div class="plan-name" data-key="planFree">Free</div><div class="price">$0</div><ul><li data-key="free1">100 messages/day</li><li data-key="free2">5 photo gens/day</li><li data-key="free3">4 AI models</li></ul><button class="btn-primary" id="planBtnFree" onclick="selectPlan('free')" data-key="currentPlan">Current</button></div>
+<div class="plan-card" style="border-color:rgba(124,58,237,0.2);"><div class="plan-name" style="color:#a78bfa;" data-key="planPro">Pro</div><div class="price">$9.99</div><ul><li data-key="pro1">500 messages/day</li><li data-key="pro2">20 photo gens/day</li><li data-key="pro3">All AI models</li></ul><button class="glow-btn" id="planBtnPro" onclick="requestUpgrade('pro')" data-key="upgrade">Upgrade</button></div>
+<div class="plan-card" style="border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.03);"><div class="plan-name" style="color:#a78bfa;" data-key="planUltra">Ultra</div><div class="price">$29.99</div><ul><li data-key="ultra1">Unlimited messages</li><li data-key="ultra2">50 photo gens/day</li><li data-key="ultra3">All AI models</li><li data-key="ultra4">Priority support</li></ul><button class="glow-btn" id="planBtnUltra" onclick="requestUpgrade('ultra')" data-key="upgrade">Upgrade</button></div>
+</div>
+<p id="planNotice" style="display:none;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.03);border-radius:12px;padding:10px 14px;"></p>
+</section>
+
+<section class="page" id="page-login">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="loginTitle">Sign In</h2>
+<p class="sub" data-key="loginSub">Welcome back to MEILUN</p>
+<form class="input-group" id="loginForm" onsubmit="return handleLogin(event)">
+<label for="loginEmail">Email</label>
+<input type="email" id="loginEmail" placeholder="you@example.com" data-key="emailPlaceholder" autocomplete="email" required maxlength="254" />
+<label for="loginPassword">Password</label>
+<input type="password" id="loginPassword" placeholder="Enter Password" data-key="passwordPlaceholder" autocomplete="current-password" required maxlength="128" />
+<p class="error-msg" id="loginError" style="display:none;" role="alert"></p>
+<button type="submit" class="btn-primary" data-key="loginBtn">Login</button>
+<button type="button" class="btn-github" onclick="handleGitHubLogin()" data-key="githubBtn" style="width:100%;height:56px;font-size:16px;background:#24292e;color:#fff;border:0;border-radius:24px;cursor:pointer;font-family:'Georgia',serif;">Continue with GitHub</button>
+<p class="link-bottom" data-key="noAccount">Don't have an account? <a onclick="showPage('register')" data-key="signUpLink">Sign Up</a></p>
+</form>
+</section>
+
+<section class="page" id="page-register">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="registerTitle">Create Account</h2>
+<p class="sub" data-key="registerSub">Join MEILUN and unlock all features</p>
+<form class="input-group" id="registerForm" onsubmit="return handleRegister(event)">
+<label for="regName">Username</label>
+<input type="text" id="regName" placeholder="Your username" data-key="namePlaceholder" autocomplete="username" required maxlength="40" minlength="2" />
+<label for="regEmail">Email</label>
+<input type="email" id="regEmail" placeholder="you@example.com" data-key="emailPlaceholder" autocomplete="email" required maxlength="254" />
+<label for="regPassword">Password</label>
+<input type="password" id="regPassword" placeholder="Enter Password" data-key="passwordPlaceholder" autocomplete="new-password" required maxlength="128" minlength="8" />
+<p class="small-note" data-key="passwordHint">At least 8 characters.</p>
+<p class="error-msg" id="regError" style="display:none;" role="alert"></p>
+<p class="small-note" data-key="ageConfirm">By creating an account, you confirm you are at least 14 years old.</p>
+<button type="submit" class="btn-primary" data-key="registerBtn">Create Account</button>
+<button type="button" class="btn-github" onclick="handleGitHubLogin()" data-key="githubBtn" style="width:100%;height:56px;font-size:16px;background:#24292e;color:#fff;border:0;border-radius:24px;cursor:pointer;font-family:'Georgia',serif;">Continue with GitHub</button>
+<p class="link-bottom" data-key="haveAccount">Already have an account? <a onclick="showPage('login')" data-key="loginLink">Sign In</a></p>
+<p class="small-note" data-key="privacyAgree">By continuing, you agree to our <a href="privacy.html" target="_blank" rel="noopener noreferrer" style="color:#a78bfa;">Privacy Policy</a></p>
+</form>
+</section>
+<section class="page" id="page-ideas">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="ideas">Idea Generator</h2>
+<p class="sub" data-key="categories">Categories</p>
+<div class="chips-row" id="ideaCategories"></div>
+<div class="input-row" style="margin:10px 0;">
+<input type="text" id="ideaInput" placeholder="Enter topic..." data-key="enterTopic" maxlength="300" />
+<button onclick="generateIdeaWithAI()" data-key="generate">Generate</button>
+</div>
+<div id="ideaResult" style="margin-top:12px;"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Chat about ideas</p>
+<div class="chat-area" id="ideaChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="ideaChatHello">Ask me about ideas!</span></div></div>
+<div class="input-row"><input type="text" id="ideaChatInput" placeholder="Ask about ideas..." data-key="ideaChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('ideaChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendIdeaChat()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('ideaChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+
+<section class="page" id="page-photo">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="photo">Photo Generator</h2>
+<p class="sub" data-key="describeImage">Describe what you want to see</p>
+<textarea id="photoDesc" placeholder="Write description..." data-key="photoPlaceholder" maxlength="1000"></textarea>
+<p class="sub" style="margin-top:12px;" data-key="chooseStyle">Choose style</p>
+<div class="styles-grid" id="photoStyles"></div>
+<p class="sub" style="margin-top:12px;" data-key="chooseFormat">Choose format</p>
+<div class="styles-grid" id="photoFormats"></div>
+<p class="sub" data-key="uiImageModel">Image model</p>
+<div class="styles-grid" id="photoModels"></div>
+<button class="btn-primary" style="width:100%;margin-top:12px;" onclick="generatePhotoWithAI()" data-key="generatePhoto">Generate photo</button>
+<div id="photoResult" style="margin-top:12px;"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Chat about photos</p>
+<div class="chat-area" id="photoChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="photoChatHello">Describe what you want to see!</span></div></div>
+<div class="input-row"><input type="text" id="photoChatInput" placeholder="Ask about photo generation..." data-key="photoChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('photoChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendPhotoChat()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('photoChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+
+<section class="page" id="page-study">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="study">Study Assistant</h2>
+<p class="sub" data-key="school">Who are you?</p>
+<div class="chips-row" id="studyUserTypes"></div>
+<p class="sub" data-key="subject">Subject / Exam</p>
+<div class="chips-row" id="studySubjects"></div>
+<div class="sub-chips" id="studyModeChips">
+<button class="sub-chip active" data-mode="explain" onclick="setStudyMode('explain')" data-key="explain">Explain</button>
+<button class="sub-chip" data-mode="practice" onclick="setStudyMode('practice')" data-key="practice">Practice</button>
+<button class="sub-chip" data-mode="test" onclick="setStudyMode('test')" data-key="test">Test</button>
+</div>
+<div class="sub-chips" id="studyExamChips" style="margin-top:6px;">
+<button class="sub-chip" data-exam="toefl" onclick="setStudyExam('toefl')" data-key="examToefl">TOEFL</button>
+<button class="sub-chip" data-exam="ielts" onclick="setStudyExam('ielts')" data-key="examIelts">IELTS</button>
+<button class="sub-chip" data-exam="csca" onclick="setStudyExam('csca')" data-key="examCsca">CSCA</button>
+<button class="sub-chip" data-exam="gmat" onclick="setStudyExam('gmat')" data-key="examGmat">GMAT</button>
+<button class="sub-chip" data-exam="gre" onclick="setStudyExam('gre')" data-key="examGre">GRE</button>
+<button class="sub-chip" data-exam="sat" onclick="setStudyExam('sat')" data-key="examSat">SAT</button>
+</div>
+<p class="sub" data-key="topic">Topic</p>
+<input type="text" id="studyTopic" style="width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px;color:#fff;font-size:13px;outline:0;margin-bottom:12px;font-family:'Georgia',serif;" placeholder="Enter topic..." data-key="enterTopicStudy" maxlength="300" />
+<button class="btn-primary" style="width:100%;" onclick="generateStudy()" data-key="generate">Generate</button>
+<div id="studyResult" style="margin-top:16px;"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Chat about study</p>
+<div class="chat-area" id="studyChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="studyChatHello">Ask me about your studies!</span></div></div>
+<div class="input-row"><input type="text" id="studyChatInput" placeholder="Ask about study..." data-key="studyChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('studyChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendStudyChat()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('studyChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+<section class="page" id="page-code">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="code">Code Generator</h2>
+<p class="sub" data-key="mode">Mode</p>
+<div class="chips-row" id="codeModes"></div>
+<p class="sub" data-key="language">Language</p>
+<div class="chips-row" id="codeLanguages"></div>
+<p class="sub" data-key="describeTask">Describe task</p>
+<textarea id="codeTask" placeholder="Write what needs to be done..." data-key="codePlaceholder" maxlength="1000"></textarea>
+<button class="btn-primary" style="width:100%;margin-top:12px;" onclick="generateCodeWithAI()" data-key="generate">Generate</button>
+<div id="codeResult" style="margin-top:12px;"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Chat about code</p>
+<div class="chat-area" id="codeChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="codeChatHello">Ask me about coding!</span></div></div>
+<div class="input-row"><input type="text" id="codeChatInput" placeholder="Ask about code..." data-key="codeChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('codeChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendCodeChat()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('codeChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+
+<section class="page" id="page-languages">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="languages">Language Practice</h2>
+<p class="sub">Hello, <span id="langUserName">Guest</span>! <span data-key="langChoose">Choose language to learn</span></p>
+<p class="sub" style="margin-top:8px;" data-key="chooseLanguageLabel">Language</p>
+<div class="chips-row" id="langPracticeLangs"></div>
+<p class="sub" data-key="level">Level</p>
+<div class="chips-row" id="langPracticeLevels"></div>
+<p class="sub" data-key="theme">Theme</p>
+<div class="chips-row" id="langPracticeThemes"></div>
+<div id="langWordCard" style="background:rgba(255,255,255,0.02);border-radius:14px;padding:20px;border:1px solid rgba(255,255,255,0.03);margin-top:12px;text-align:center;">
+<p id="langWord" style="font-size:28px;color:#fff;font-weight:300;">Airplane</p>
+<p id="langTranslation" style="font-size:18px;color:#a78bfa;">Самолёт</p>
+<p id="langExample" style="font-size:13px;color:rgba(255,255,255,0.3);font-style:italic;margin:8px 0;">"I travel by plane."</p>
+<div style="display:flex;gap:10px;justify-content:center;margin-top:12px;">
+<button class="btn-primary" style="padding:8px 20px;font-size:12px;background:#4caf50;" onclick="langWordKnown()" data-key="iKnow">I know</button>
+<button class="btn-secondary" style="padding:8px 20px;font-size:12px;background:#f44336;border-color:#f44336;" onclick="langWordUnknown()" data-key="iDontKnow">I don't know</button>
+</div>
+<p id="langProgress" style="color:rgba(255,255,255,0.2);font-size:12px;margin-top:8px;">0 / 0 words</p>
+</div>
+<div class="word-add-area">
+<input type="text" id="newWord" placeholder="Word" style="flex:1;" maxlength="60" />
+<input type="text" id="newTranslation" placeholder="Translation" style="flex:1;" maxlength="60" />
+<input type="text" id="newExample" placeholder="Example (optional)" style="flex:1;" maxlength="140" />
+<button class="btn-primary" onclick="addUserWord()" style="padding:8px 16px;">+ Add</button>
+</div>
+<div id="userWordsList" class="word-list"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Practice with AI</p>
+<div class="chat-area" id="langChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="langChatHello">Let's practice your language!</span></div></div>
+<div class="input-row"><input type="text" id="langChatInput" placeholder="Practice: type a sentence..." data-key="langChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('langChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendLangPractice()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('langChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+
+<section class="page" id="page-translator">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="translator">Translator</h2>
+<p class="sub" data-key="fromLanguage">From language</p>
+<div class="chips-row" id="translatorFrom"></div>
+<p class="sub" data-key="toLanguage">To language</p>
+<div class="chips-row" id="translatorTo"></div>
+<textarea id="translateInput" placeholder="Enter text to translate..." data-key="translatePlaceholder" maxlength="1000"></textarea>
+<button class="btn-primary" style="width:100%;margin-top:12px;" onclick="translateWithAI()" data-key="translate">Translate</button>
+<div id="translateResult" style="margin-top:12px;"></div>
+<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.03);">
+<p class="sub" data-key="chat">Chat about translation</p>
+<div class="chat-area" id="transChatArea" style="min-height:60px;max-height:150px;"><div class="msg ai"><span class="label">AI</span><span data-key="transChatHello">Ask me about translations!</span></div></div>
+<div class="input-row"><input type="text" id="transChatInput" placeholder="Ask about translation..." data-key="transChatPlaceholder" maxlength="1000" /><button type="button" onclick="startListenInto('transChatInput')" aria-label="Voice input" title="Voice input" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:10px 12px;color:#a78bfa;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button onclick="sendTransChat()"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button><button onclick="clearChat('transChatArea')" style="background:transparent;border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);border-radius:20px;padding:10px 14px;font-size:11px;cursor:pointer;" aria-label="Clear"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+</div>
+</section>
+<section class="page" id="page-voice">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="voice">Voice Chat</h2>
+<p class="sub" data-key="voiceDesc">Talk to Luni using your voice</p>
+<div style="display:flex;flex-direction:column;align-items:center;padding:20px 0;">
+<button class="luni-aura" id="voiceLuniAura" onclick="startVoiceChat()" style="width:150px;height:150px;cursor:pointer;" aria-label="Start voice chat">
+<div class="luni-ring"></div>
+<div class="luni-ring"></div>
+<span class="luni-icon" style="font-size:60px;"><svg class="icon-spark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z" fill="currentColor"/></svg></span>
+</button>
+<p id="voiceStatus" style="color:rgba(255,255,255,0.3);font-size:14px;margin-top:12px;" data-key="tapToSpeak">Tap to speak</p>
+</div>
+<div class="chat-area" id="voiceChatArea" style="min-height:80px;max-height:200px;"><div class="msg ai"><span class="label">AI</span><span data-key="voiceHello">I'm listening. Ask me anything!</span></div></div>
+</section>
+
+<section class="page" id="page-about">
+<button class="btn-back" onclick="showPage('home')"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<h2 data-key="aboutTitle">About MEILUN</h2>
+<p class="sub" data-key="aboutDesc">The next-generation AI assistant</p>
+<p data-key="aboutText" style="max-width:650px;line-height:1.8;color:rgba(255,255,255,0.4);">MEILUN is a next-generation AI assistant designed to simplify your daily tasks. With 6 core functions, support for 9 languages, and a unique avatar Luni, it adapts to your needs — whether for work, study, or creativity.</p>
+<p style="margin-top:14px;color:rgba(255,255,255,0.5);font-size:14px;" data-key="modelsLabel">AI Models:</p>
+<div class="models-list" id="aboutModelsList" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;"></div>
+<p style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.15);" data-key="coming">Coming to Google Play & App Store in 2027.</p>
+</section>
+</div>
+
+<footer>
+<span>© 2027 MEILUN</span>
+<div style="display:flex;gap:16px;flex-wrap:wrap;">
+<span data-key="footerStore">Coming to Google Play & App Store — 2027</span>
+<a href="privacy.html" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.12);text-decoration:none;font-size:11px;" data-key="footerPrivacy">Privacy Policy</a>
+<button onclick="showFeedback()" style="color:#a78bfa;background:0;border:0;cursor:pointer;font-size:11px;" data-key="leaveFeedback">Leave Feedback</button>
+</div>
+</footer>
+
+<div class="feedback-overlay" id="feedbackOverlay">
+<div class="modal">
+<button class="close" onclick="closeFeedback()" aria-label="Close"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<iframe src="https://tally.so/r/J9vpOz" width="100%" height="600" loading="lazy" title="Feedback form" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+</div>
+</div>
+
+<div class="copy-toast" id="copyToast" role="status">Copied!</div>
+
+<div class="cookie-banner" id="cookieConsent">
+<span><span data-key="cookieText">We use a small cookie to remember your language and preferences. No tracking or ads.</span> <a href="privacy.html" rel="noopener noreferrer" data-key="footerPrivacy">Privacy Policy</a></span>
+<div style="display:flex;gap:10px;">
+<button class="btn-accept" onclick="acceptCookies()">Accept</button>
+<button class="btn-decline" onclick="declineCookies()">Decline</button>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+'use strict';
+// ===== SUPABASE (auth: email/password + GitHub OAuth) =====
+const SUPABASE_URL = 'https://mnyqoglsmfcyukyiotqh.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Z4ZliQ-c5ASc4Btedby-jA_OlxFr6ph';
+let supabaseClient = null;
+let supabaseReady = false;
+try {
+  if (window.supabase && typeof window.supabase.createClient === 'function'){
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseReady = true;
+  } else {
+    console.error('MEILUN: Supabase SDK did not load — auth is disabled until this is fixed.');
+  }
+} catch (e) {
+  console.error('MEILUN: Supabase init failed:', e);
+}
+const translations = {
+English: {
+home:'Home',features:'Features',profile:'Profile',plans:'Plans',login:'Sign In',start:'Get Started',badge:'COMING 2027',
+intelligence:'intelligence',intuition:'intuition',quote:'"The AI that listens before you speak"',
+heroDesc:'6 powerful functions, 9 languages, voice recognition, and avatar Luni. MEILUN is your intelligent companion for work, study, and creativity.',
+try:'Try MEILUN',learn:'Learn More',stat1:'Functions',stat2:'Languages',stat3:'Availability',stat4:'Possibilities',chooseModel:'Choose AI Model',
+featuresTitle:'Features',featuresSub:'Explore all 6 core functions of MEILUN',
+f1:'Idea Generator',f2:'Photo Generator',f3:'Study Assistant',f4:'Code Generator',f5:'Language Practice',f6:'Translator',
+profileTitle:'Profile',profileSub:'Your personal dashboard',notSigned:'Not signed in',messagesCount:'messages',generationsCount:'generations',
+wordsLearned:'words learned',registerDate:'registered',signInBtn:'Sign In',logoutBtn:'Logout',profileManagePlan:'Manage plan',
+plansTitle:'Subscription Plans',plansSub:'Choose the plan that fits your needs',planFree:'Free',planPro:'Pro',planUltra:'Ultra',
+free1:'100 messages/day',free2:'5 photo gens/day',free3:'4 AI models',pro1:'500 messages/day',pro2:'20 photo gens/day',pro3:'All AI models',
+ultra1:'Unlimited messages',ultra2:'50 photo gens/day',ultra3:'All AI models',ultra4:'Priority support',currentPlan:'Current',upgrade:'Upgrade',
+loginTitle:'Sign In',loginSub:'Welcome back to MEILUN',loginBtn:'Login',githubBtn:'Continue with GitHub',
+noAccount:"Don't have an account?",signUpLink:'Sign Up',registerTitle:'Create Account',registerSub:'Join MEILUN and unlock all features',
+registerBtn:'Create Account',haveAccount:'Already have an account?',loginLink:'Sign In',namePlaceholder:'Username',
+emailPlaceholder:'Email',passwordPlaceholder:'Password',ageConfirm:'By creating an account, you confirm you are at least 14 years old.',passwordHint:'At least 8 characters.',
+privacyAgree:'By continuing, you agree to our Privacy Policy',ideas:'Idea Generator',categories:'Categories',
+enterTopic:'Enter topic...',generate:'Generate',photo:'Photo Generator',describeImage:'Describe what you want to see',
+chooseStyle:'Choose style',chooseFormat:'Choose format',generatePhoto:'Generate photo',photoPlaceholder:'Write description...',
+study:'Study Assistant',school:'Who are you?',subject:'Subject / Exam',mode:'Mode',topic:'Topic',
+enterTopicStudy:'Enter topic...',explain:'Explain',practice:'Practice',test:'Test',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Code Generator',language:'Language',describeTask:'Describe task',codePlaceholder:'Write what needs to be done...',
+languages:'Language Practice',level:'Level',theme:'Theme',chooseLanguageLabel:'Language',langChoose:'Choose language to learn',
+iKnow:'I know',iDontKnow:"I don't know",translator:'Translator',fromLanguage:'From language',toLanguage:'To language',
+translate:'Translate',translatePlaceholder:'Enter text to translate...',voice:'Voice Chat',voiceDesc:'Talk to Luni using your voice',
+tapToSpeak:'Tap to speak',voiceHello:"I'm listening. Ask me anything!",aboutTitle:'About MEILUN',aboutDesc:'The next-generation AI assistant',
+aboutText:'MEILUN is a next-generation AI assistant designed to simplify your daily tasks. With 6 core functions, support for 9 languages, and a unique avatar Luni, it adapts to your needs.',
+modelsLabel:'AI Models:',coming:'Coming to Google Play & App Store in 2027.',tryChat:'CHAT',aiHello:'Hello! Ask me anything.',
+chatPlaceholder:'Type a message...',studyChatHello:'Ask me about your studies!',studyChatPlaceholder:'Ask about study...',
+photoChatHello:'Describe what you want to see!',photoChatPlaceholder:'Ask about photo generation...',
+ideaChatHello:'Ask me about ideas!',ideaChatPlaceholder:'Ask about ideas...',codeChatHello:'Ask me about coding!',codeChatPlaceholder:'Ask about code...',
+langChatHello:"Let's practice your language!",langChatPlaceholder:'Practice: type a sentence...',
+transChatHello:'Ask me about translations!',transChatPlaceholder:'Ask about translation...',
+footerStore:'Coming to Google Play & App Store — 2027',footerPrivacy:'Privacy Policy',leaveFeedback:'Leave Feedback',
+errorFillFields:'Please fill in all fields.',errorEmailInvalid:'Invalid email address.',errorPasswordShort:'Password must be at least 8 characters.',
+errorLimitReached:'Daily limit reached. Upgrade to continue.',errorUserExists:'An account with this email already exists.',
+errorInvalidLogin:'Invalid email or password.',chat:'Chat',githubBtn:'Continue with GitHub',uiThinking:'AI is thinking...',uiListening:'Listening...',uiSpeaking:'Speaking...',uiProcessing:'Processing...',uiConnectionError:'Connection error. Please try again.',uiNoResult:'No result yet.',uiNoWords:'No words yet',uiSpeechNotSupported:'Speech recognition is not supported in this browser.',uiImageModel:'Image model',uiDownload:'Download',uiOpenFull:'Open full size',uiRemoveImage:'Remove image',cookieText:'We use a small cookie to remember your language and preferences. No tracking or ads.',errorAuthUnavailable:'Sign-in is temporarily unavailable. Please try again later.',errorEmailNotConfirmed:'Please confirm your email first — check your inbox.',infoConfirmEmail:'Account created! Check your email to confirm it before signing in.',billingNotConnected:'Payments aren\u2019t connected yet, so upgrades aren\u2019t available. This plan will be enabled once billing is set up.'
+},
+Русский: {
+home:'Главная',features:'Функции',profile:'Профиль',plans:'Тарифы',login:'Войти',start:'Начать',badge:'СКОРО 2027',
+intelligence:'интеллект',intuition:'интуиция',quote:'"ИИ, который слушает, прежде чем ты заговоришь"',
+heroDesc:'6 мощных функций, 9 языков, распознавание голоса и аватар Luni. MEILUN — ваш интеллектуальный помощник для работы, учёбы и творчества.',
+try:'Попробовать MEILUN',learn:'Узнать больше',stat1:'Функций',stat2:'Языков',stat3:'Доступность',stat4:'Возможности',chooseModel:'Выбери модель ИИ',
+featuresTitle:'Функции',featuresSub:'Изучите все 6 основных функций MEILUN',
+f1:'Генератор идей',f2:'Генератор фото',f3:'Помощник в учёбе',f4:'Генератор кода',f5:'Практика языка',f6:'Переводчик',
+profileTitle:'Профиль',profileSub:'Ваша личная панель',notSigned:'Не авторизован',messagesCount:'сообщений',generationsCount:'генераций',
+wordsLearned:'слов изучено',registerDate:'зарегистрирован',signInBtn:'Войти',logoutBtn:'Выйти',profileManagePlan:'Управление тарифом',
+plansTitle:'Тарифы',plansSub:'Выберите тариф, который подходит вам',planFree:'Бесплатный',planPro:'PRO',planUltra:'ULTRA',
+free1:'100 сообщений/день',free2:'5 генераций фото/день',free3:'4 ИИ модели',pro1:'500 сообщений/день',pro2:'20 генераций фото/день',pro3:'Все ИИ модели',
+ultra1:'Безлимит сообщений',ultra2:'50 генераций фото/день',ultra3:'Все ИИ модели',ultra4:'Приоритетная поддержка',currentPlan:'Текущий',upgrade:'Обновить',
+loginTitle:'Вход',loginSub:'Добро пожаловать в MEILUN',loginBtn:'Войти',githubBtn:'Продолжить через GitHub',
+noAccount:'Нет аккаунта?',signUpLink:'Зарегистрироваться',registerTitle:'Создать аккаунт',registerSub:'Присоединяйтесь к MEILUN и откройте все функции',
+registerBtn:'Создать аккаунт',haveAccount:'Уже есть аккаунт?',loginLink:'Войти',namePlaceholder:'Имя пользователя',
+emailPlaceholder:'Электронная почта',passwordPlaceholder:'Пароль',ageConfirm:'Создавая аккаунт, вы подтверждаете, что вам не менее 14 лет.',passwordHint:'Минимум 8 символов.',
+privacyAgree:'Продолжая, вы соглашаетесь с нашей Политикой конфиденциальности',ideas:'Генератор идей',categories:'Категории',
+enterTopic:'Введите тему...',generate:'Сгенерировать',photo:'Генератор фото',describeImage:'Опиши что хочешь увидеть',
+chooseStyle:'Выбери стиль',chooseFormat:'Выбери формат',generatePhoto:'Сгенерировать фото',photoPlaceholder:'Напишите описание...',
+study:'Помощник в учёбе',school:'Кто вы?',subject:'Предмет / Экзамен',mode:'Режим',topic:'Тема',
+enterTopicStudy:'Введите тему...',explain:'Объяснить',practice:'Практика',test:'Тест',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Генератор кода',language:'Язык',describeTask:'Опиши задачу',codePlaceholder:'Напишите, что нужно сделать...',
+languages:'Практика языков',level:'Уровень',theme:'Тема',chooseLanguageLabel:'Язык',langChoose:'Выберите язык для изучения',
+iKnow:'Знаю',iDontKnow:'Не знаю',translator:'Переводчик',fromLanguage:'С какого языка',toLanguage:'На какой язык',
+translate:'Перевести',translatePlaceholder:'Введите текст для перевода...',voice:'Голосовой чат',voiceDesc:'Общайтесь с Luni голосом',
+tapToSpeak:'Нажмите, чтобы говорить',voiceHello:'Я слушаю. Спросите меня о чём угодно!',aboutTitle:'О MEILUN',aboutDesc:'ИИ-помощник нового поколения',
+aboutText:'MEILUN — это ИИ-помощник нового поколения, созданный для упрощения повседневных задач. С 6 основными функциями, поддержкой 9 языков и уникальным аватаром Luni.',
+modelsLabel:'ИИ модели:',coming:'Скоро в Google Play и App Store в 2027 году.',tryChat:'ЧАТ',aiHello:'Привет! Спроси меня о чём угодно.',
+chatPlaceholder:'Напишите сообщение...',studyChatHello:'Спросите меня о вашей учёбе!',studyChatPlaceholder:'Спросить об учёбе...',
+photoChatHello:'Опишите, что вы хотите увидеть!',photoChatPlaceholder:'Спросить о генерации фото...',
+ideaChatHello:'Спросите меня об идеях!',ideaChatPlaceholder:'Спросить об идеях...',codeChatHello:'Спросите меня о коде!',codeChatPlaceholder:'Спросить о коде...',
+langChatHello:'Давайте практиковать ваш язык!',langChatPlaceholder:'Практика: напишите предложение...',
+transChatHello:'Спросите меня о переводах!',transChatPlaceholder:'Спросить о переводе...',
+footerStore:'Скоро в Google Play и App Store — 2027',footerPrivacy:'Политика конфиденциальности',leaveFeedback:'Оставить отзыв',
+errorFillFields:'Пожалуйста, заполните все поля.',errorEmailInvalid:'Неверный адрес электронной почты.',errorPasswordShort:'Пароль должен быть не менее 8 символов.',
+errorLimitReached:'Дневной лимит достигнут. Обновите тариф для продолжения.',errorUserExists:'Аккаунт с такой почтой уже существует.',
+errorInvalidLogin:'Неверная почта или пароль.',chat:'Чат',githubBtn:'Продолжить через GitHub',uiThinking:'ИИ печатает...',uiListening:'Слушаю...',uiSpeaking:'Говорю...',uiProcessing:'Обрабатываю...',uiConnectionError:'Ошибка соединения. Попробуйте ещё раз.',uiNoResult:'Пока нет результата.',uiNoWords:'Пока нет слов',uiSpeechNotSupported:'Распознавание речи не поддерживается в этом браузере.',uiImageModel:'Модель изображения',uiDownload:'Скачать',uiOpenFull:'Открыть в полном размере',uiRemoveImage:'Убрать изображение',cookieText:'Мы используем небольшой cookie-файл, чтобы запомнить ваш язык и настройки. Никакой слежки и рекламы.',errorAuthUnavailable:'Вход временно недоступен. Попробуйте позже.',errorEmailNotConfirmed:'Сначала подтвердите почту — проверьте письмо во входящих.',infoConfirmEmail:'Аккаунт создан! Проверьте почту и подтвердите её, прежде чем входить.',billingNotConnected:'Оплата пока не подключена, поэтому апгрейд тарифа недоступен. Как только подключим биллинг — кнопка заработает.'
+},
+Español: {
+home:'Inicio',features:'Funcionalidades',profile:'Perfil',plans:'Planes',login:'Iniciar',start:'Comenzar',badge:'PRÓXIMAMENTE 2027',
+intelligence:'inteligencia',intuition:'intuición',quote:'"La IA que escucha antes de que hables"',
+heroDesc:'6 funciones potentes, 9 idiomas, reconocimiento de voz y avatar Luni. MEILUN es tu compañero inteligente para el trabajo, el estudio y la creatividad.',
+try:'Probar MEILUN',learn:'Más información',stat1:'Funciones',stat2:'Idiomas',stat3:'Disponibilidad',stat4:'Posibilidades',chooseModel:'Elige modelo de IA',
+featuresTitle:'Funcionalidades',featuresSub:'Explora las 6 funciones principales de MEILUN',
+f1:'Generador de ideas',f2:'Generador de fotos',f3:'Asistente de estudio',f4:'Generador de código',f5:'Práctica de idiomas',f6:'Traductor',
+profileTitle:'Perfil',profileSub:'Tu panel personal',notSigned:'No has iniciado sesión',messagesCount:'mensajes',generationsCount:'generaciones',
+wordsLearned:'palabras aprendidas',registerDate:'registrado',signInBtn:'Iniciar sesión',logoutBtn:'Cerrar sesión',
+plansTitle:'Planes de suscripción',plansSub:'Elige el plan que se adapte a tus necesidades',planFree:'Gratis',planPro:'Pro',planUltra:'Ultra',
+free1:'100 mensajes/día',free2:'5 generaciones de foto/día',free3:'4 modelos de IA',pro1:'500 mensajes/día',pro2:'20 generaciones de foto/día',pro3:'Todos los modelos IA',
+ultra1:'Mensajes ilimitados',ultra2:'50 generaciones de foto/día',ultra3:'Todos los modelos IA',ultra4:'Soporte prioritario',currentPlan:'Actual',upgrade:'Mejorar',
+loginTitle:'Iniciar sesión',loginSub:'Bienvenido de vuelta a MEILUN',loginBtn:'Iniciar sesión',
+noAccount:'¿No tienes cuenta?',signUpLink:'Registrarse',registerTitle:'Crear cuenta',registerSub:'Únete a MEILUN y desbloquea todas las funciones',
+registerBtn:'Crear cuenta',haveAccount:'¿Ya tienes cuenta?',loginLink:'Iniciar sesión',namePlaceholder:'Nombre de usuario',
+emailPlaceholder:'Correo electrónico',passwordPlaceholder:'Contraseña',ageConfirm:'Al crear una cuenta, confirmas que tienes al menos 14 años.',
+privacyAgree:'Al continuar, aceptas nuestra Política de Privacidad',ideas:'Generador de ideas',categories:'Categorías',
+enterTopic:'Introduce tema...',generate:'Generar',photo:'Generador de fotos',describeImage:'Describe lo que quieres ver',
+chooseStyle:'Elige un estilo',chooseFormat:'Elige un formato',generatePhoto:'Generar foto',photoPlaceholder:'Escribe una descripción...',
+study:'Asistente de estudio',school:'¿Quién eres?',subject:'Asignatura / Examen',mode:'Modo',topic:'Tema',
+enterTopicStudy:'Introduce tema...',explain:'Explicar',practice:'Practicar',test:'Examen',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Generador de código',language:'Idioma',describeTask:'Describe la tarea',codePlaceholder:'Escribe lo que hay que hacer...',
+languages:'Práctica de idiomas',level:'Nivel',theme:'Tema',chooseLanguageLabel:'Idioma',langChoose:'Elige idioma para aprender',
+iKnow:'Lo sé',iDontKnow:'No lo sé',translator:'Traductor',fromLanguage:'Desde el idioma',toLanguage:'Al idioma',
+translate:'Traducir',translatePlaceholder:'Introduce texto para traducir...',voice:'Chat de voz',voiceDesc:'Habla con Luni usando tu voz',
+tapToSpeak:'Toca para hablar',voiceHello:'¡Estoy escuchando! Pregúntame cualquier cosa.',aboutTitle:'Acerca de MEILUN',aboutDesc:'El asistente de IA de nueva generación',
+aboutText:'MEILUN es un asistente de IA de nueva generación diseñado para simplificar tus tareas diarias.',
+modelsLabel:'Modelos IA:',coming:'Próximamente en Google Play y App Store en 2027.',tryChat:'CHAT',aiHello:'¡Hola! Pregúntame cualquier cosa.',
+chatPlaceholder:'Escribe un mensaje...',studyChatHello:'¡Pregúntame sobre tus estudios!',studyChatPlaceholder:'Preguntar sobre estudios...',
+photoChatHello:'¡Describe lo que quieres ver!',photoChatPlaceholder:'Preguntar sobre generación de fotos...',
+ideaChatHello:'¡Pregúntame sobre ideas!',ideaChatPlaceholder:'Preguntar sobre ideas...',codeChatHello:'¡Pregúntame sobre código!',codeChatPlaceholder:'Preguntar sobre código...',
+langChatHello:'¡Practiquemos tu idioma!',langChatPlaceholder:'Práctica: escribe una frase...',
+transChatHello:'¡Pregúntame sobre traducciones!',transChatPlaceholder:'Preguntar sobre traducción...',
+footerStore:'Próximamente en Google Play y App Store — 2027',footerPrivacy:'Política de Privacidad',leaveFeedback:'Dejar comentario',
+errorFillFields:'Por favor, completa todos los campos.',errorEmailInvalid:'Correo electrónico inválido.',errorPasswordShort:'La contraseña debe tener al menos 6 caracteres.',
+errorLimitReached:'Límite diario alcanzado.',chat:'Chat',githubBtn:'Continuar con GitHub',uiThinking:'La IA está pensando...',uiListening:'Escuchando...',uiSpeaking:'Hablando...',uiProcessing:'Procesando...',uiConnectionError:'Error de conexión. Inténtalo de nuevo.',uiNoResult:'Aún no hay resultado.',uiNoWords:'Todavía no hay palabras',uiSpeechNotSupported:'El reconocimiento de voz no es compatible con este navegador.',uiImageModel:'Modelo de imagen',uiDownload:'Descargar',uiOpenFull:'Ver tamaño completo',uiRemoveImage:'Quitar imagen',cookieText:'Usamos una pequeña cookie para recordar tu idioma y preferencias. Sin rastreo ni anuncios.'
+},
+Francais: {
+home:'Accueil',features:'Fonctions',profile:'Profil',plans:'Forfaits',login:'Connexion',start:'Commencer',badge:'PROCHAINEMENT 2027',
+intelligence:'intelligence',intuition:'intuition',quote:'"L\u2019IA qui écoute avant que vous ne parliez"',
+heroDesc:'6 fonctions puissantes, 9 langues, reconnaissance vocale et avatar Luni. MEILUN est votre compagnon intelligent pour le travail, les études et la créativité.',
+try:'Essayer MEILUN',learn:'En savoir plus',stat1:'Fonctions',stat2:'Langues',stat3:'Disponibilité',stat4:'Possibilités',chooseModel:'Choisis le modèle IA',
+featuresTitle:'Fonctions',featuresSub:'Découvrez les 6 fonctions principales de MEILUN',
+f1:'Générateur d\u2019idées',f2:'Générateur de photos',f3:'Assistant d\u2019étude',f4:'Générateur de code',f5:'Pratique des langues',f6:'Traducteur',
+profileTitle:'Profil',profileSub:'Votre tableau de bord personnel',notSigned:'Non connecté',messagesCount:'messages',generationsCount:'générations',
+wordsLearned:'mots appris',registerDate:'inscrit',signInBtn:'Se connecter',logoutBtn:'Déconnexion',
+plansTitle:'Forfaits d\u2019abonnement',plansSub:'Choisissez le forfait qui vous convient',planFree:'Gratuit',planPro:'Pro',planUltra:'Ultra',
+free1:'100 messages/jour',free2:'5 générations photo/jour',free3:'4 modèles IA',pro1:'500 messages/jour',pro2:'20 générations photo/jour',pro3:'Tous les modèles IA',
+ultra1:'Messages illimités',ultra2:'50 générations photo/jour',ultra3:'Tous les modèles IA',ultra4:'Support prioritaire',currentPlan:'Actuel',upgrade:'Améliorer',
+loginTitle:'Connexion',loginSub:'Bon retour sur MEILUN',loginBtn:'Se connecter',
+noAccount:'Pas de compte?',signUpLink:'S\u2019inscrire',registerTitle:'Créer un compte',registerSub:'Rejoignez MEILUN et débloquez toutes les fonctionnalités',
+registerBtn:'Créer un compte',haveAccount:'Vous avez déjà un compte?',loginLink:'Se connecter',namePlaceholder:'Nom d\u2019utilisateur',
+emailPlaceholder:'Email',passwordPlaceholder:'Mot de passe',ageConfirm:'En créant un compte, vous confirmez avoir au moins 14 ans.',
+privacyAgree:'En continuant, vous acceptez notre Politique de confidentialité',ideas:'Générateur d\u2019idées',categories:'Catégories',
+enterTopic:'Entrez un sujet...',generate:'Générer',photo:'Générateur de photos',describeImage:'Décris ce que tu veux voir',
+chooseStyle:'Choisis un style',chooseFormat:'Choisis un format',generatePhoto:'Générer une photo',photoPlaceholder:'Écrivez une description...',
+study:'Assistant d\u2019étude',school:'Qui êtes-vous?',subject:'Matière / Examen',mode:'Mode',topic:'Sujet',
+enterTopicStudy:'Entrez un sujet...',explain:'Expliquer',practice:'Pratiquer',test:'Test',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Générateur de code',language:'Langage',describeTask:'Décris la tâche',codePlaceholder:'Écrivez ce qui doit être fait...',
+languages:'Pratique des langues',level:'Niveau',theme:'Thème',chooseLanguageLabel:'Langue',langChoose:'Choisis la langue à apprendre',
+iKnow:'Je sais',iDontKnow:'Je ne sais pas',translator:'Traducteur',fromLanguage:'De la langue',toLanguage:'À la langue',
+translate:'Traduire',translatePlaceholder:'Entrez le texte à traduire...',voice:'Chat vocal',voiceDesc:'Parlez à Luni avec votre voix',
+tapToSpeak:'Appuyez pour parler',voiceHello:'Je vous écoute. Posez-moi n\u2019importe quelle question!',aboutTitle:'À propos de MEILUN',aboutDesc:'L\u2019assistant IA de nouvelle génération',
+aboutText:'MEILUN est un assistant IA de nouvelle génération conçu pour simplifier vos tâches quotidiennes.',
+modelsLabel:'Modèles IA:',coming:'Bientôt sur Google Play et App Store en 2027.',tryChat:'CHAT',aiHello:'Bonjour! Posez-moi n\u2019importe quelle question.',
+chatPlaceholder:'Écrivez un message...',studyChatHello:'Posez-moi des questions sur vos études!',studyChatPlaceholder:'Poser une question sur les études...',
+photoChatHello:'Décrivez ce que vous voulez voir!',photoChatPlaceholder:'Poser une question sur la génération de photos...',
+ideaChatHello:'Posez-moi des questions sur les idées!',ideaChatPlaceholder:'Poser une question sur les idées...',codeChatHello:'Posez-moi des questions sur le code!',codeChatPlaceholder:'Poser une question sur le code...',
+langChatHello:'Pratiquons votre langue!',langChatPlaceholder:'Pratique: écrivez une phrase...',
+transChatHello:'Posez-moi des questions sur les traductions!',transChatPlaceholder:'Poser une question sur la traduction...',
+footerStore:'Bientôt sur Google Play et App Store — 2027',footerPrivacy:'Politique de confidentialité',leaveFeedback:'Laisser un avis',
+errorFillFields:'Veuillez remplir tous les champs.',errorEmailInvalid:'Adresse email invalide.',errorPasswordShort:'Le mot de passe doit contenir au moins 6 caractères.',
+errorLimitReached:'Limite quotidienne atteinte.',chat:'Chat',githubBtn:'Continuer avec GitHub',uiThinking:'L\u2019IA réfléchit...',uiListening:'Écoute en cours...',uiSpeaking:'En train de parler...',uiProcessing:'Traitement...',uiConnectionError:'Erreur de connexion. Veuillez réessayer.',uiNoResult:'Pas encore de résultat.',uiNoWords:'Pas encore de mots',uiSpeechNotSupported:'La reconnaissance vocale n\u2019est pas prise en charge par ce navigateur.',uiImageModel:'Modèle d\u2019image',uiDownload:'Télécharger',uiOpenFull:'Voir en taille réelle',uiRemoveImage:'Retirer l\u2019image',cookieText:'Nous utilisons un petit cookie pour mémoriser votre langue et vos préférences. Aucun suivi ni publicité.'
+},
+Deutsch: {
+home:'Startseite',features:'Funktionen',profile:'Profil',plans:'Pläne',login:'Anmelden',start:'Loslegen',badge:'DEMNÄCHST 2027',
+intelligence:'Intelligenz',intuition:'Intuition',quote:'"Die KI, die zuhört, bevor du sprichst"',
+heroDesc:'6 leistungsstarke Funktionen, 9 Sprachen, Spracherkennung und Avatar Luni. MEILUN ist dein intelligenter Begleiter für Arbeit, Studium und Kreativität.',
+try:'MEILUN ausprobieren',learn:'Mehr erfahren',stat1:'Funktionen',stat2:'Sprachen',stat3:'Verfügbarkeit',stat4:'Möglichkeiten',chooseModel:'Wähle das KI-Modell',
+featuresTitle:'Funktionen',featuresSub:'Entdecke alle 6 Kernfunktionen von MEILUN',
+f1:'Ideen Generator',f2:'Foto Generator',f3:'Lernassistent',f4:'Code Generator',f5:'Sprachpraxis',f6:'Übersetzer',
+profileTitle:'Profil',profileSub:'Dein persönliches Dashboard',notSigned:'Nicht angemeldet',messagesCount:'Nachrichten',generationsCount:'Generierungen',
+wordsLearned:'gelernte Wörter',registerDate:'registriert',signInBtn:'Anmelden',logoutBtn:'Abmelden',
+plansTitle:'Abonnement-Pläne',plansSub:'Wähle den Plan, der zu dir passt',planFree:'Kostenlos',planPro:'Pro',planUltra:'Ultra',
+free1:'100 Nachrichten/Tag',free2:'5 Foto-Generierungen/Tag',free3:'4 KI-Modelle',pro1:'500 Nachrichten/Tag',pro2:'20 Foto-Generierungen/Tag',pro3:'Alle KI-Modelle',
+ultra1:'Unbegrenzte Nachrichten',ultra2:'50 Foto-Generierungen/Tag',ultra3:'Alle KI-Modelle',ultra4:'Prioritäts-Support',currentPlan:'Aktuell',upgrade:'Upgraden',
+loginTitle:'Anmelden',loginSub:'Willkommen zurück bei MEILUN',loginBtn:'Anmelden',
+noAccount:'Kein Konto?',signUpLink:'Registrieren',registerTitle:'Konto erstellen',registerSub:'Tritt MEILUN bei und schalte alle Funktionen frei',
+registerBtn:'Konto erstellen',haveAccount:'Bereits ein Konto?',loginLink:'Anmelden',namePlaceholder:'Benutzername',
+emailPlaceholder:'E-Mail',passwordPlaceholder:'Passwort',ageConfirm:'Mit der Erstellung eines Kontos bestätigst du, dass du mindestens 14 Jahre alt bist.',
+privacyAgree:'Durch Fortfahren stimmst du unserer Datenschutzrichtlinie zu',ideas:'Ideen Generator',categories:'Kategorien',
+enterTopic:'Thema eingeben...',generate:'Generieren',photo:'Foto Generator',describeImage:'Beschreibe, was du sehen möchtest',
+chooseStyle:'Wähle einen Stil',chooseFormat:'Wähle ein Format',generatePhoto:'Foto generieren',photoPlaceholder:'Beschreibung schreiben...',
+study:'Lernassistent',school:'Wer bist du?',subject:'Fach / Prüfung',mode:'Modus',topic:'Thema',
+enterTopicStudy:'Thema eingeben...',explain:'Erklären',practice:'Üben',test:'Test',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Code Generator',language:'Sprache',describeTask:'Beschreibe die Aufgabe',codePlaceholder:'Schreibe, was getan werden muss...',
+languages:'Sprachpraxis',level:'Niveau',theme:'Thema',chooseLanguageLabel:'Sprache',langChoose:'Wähle eine Sprache zum Lernen',
+iKnow:'Ich weiß',iDontKnow:'Ich weiß nicht',translator:'Übersetzer',fromLanguage:'Von der Sprache',toLanguage:'Zur Sprache',
+translate:'Übersetzen',translatePlaceholder:'Text zum Übersetzen eingeben...',voice:'Sprach-Chat',voiceDesc:'Sprich mit Luni mit deiner Stimme',
+tapToSpeak:'Zum Sprechen tippen',voiceHello:'Ich höre zu. Frag mich alles!',aboutTitle:'Über MEILUN',aboutDesc:'Der KI-Assistent der nächsten Generation',
+aboutText:'MEILUN ist ein KI-Assistent der nächsten Generation, der deine täglichen Aufgaben vereinfachen soll.',
+modelsLabel:'KI-Modelle:',coming:'Bald im Google Play und App Store in 2027.',tryChat:'CHAT',aiHello:'Hallo! Frag mich alles.',
+chatPlaceholder:'Schreibe eine Nachricht...',studyChatHello:'Frag mich zu deinem Studium!',studyChatPlaceholder:'Frage zum Studium...',
+photoChatHello:'Beschreibe, was du sehen möchtest!',photoChatPlaceholder:'Frage zur Foto-Generierung...',
+ideaChatHello:'Frag mich nach Ideen!',ideaChatPlaceholder:'Frage zu Ideen...',codeChatHello:'Frag mich zum Code!',codeChatPlaceholder:'Frage zum Code...',
+langChatHello:'Üben wir deine Sprache!',langChatPlaceholder:'Übung: schreibe einen Satz...',
+transChatHello:'Frag mich zu Übersetzungen!',transChatPlaceholder:'Frage zur Übersetzung...',
+footerStore:'Bald im Google Play und App Store — 2027',footerPrivacy:'Datenschutzrichtlinie',leaveFeedback:'Feedback geben',
+errorFillFields:'Bitte fülle alle Felder aus.',errorEmailInvalid:'Ungültige E-Mail-Adresse.',errorPasswordShort:'Das Passwort muss mindestens 6 Zeichen lang sein.',
+errorLimitReached:'Tägliches Limit erreicht.',chat:'Chat',githubBtn:'Mit GitHub fortfahren',uiThinking:'Die KI denkt nach...',uiListening:'Hört zu...',uiSpeaking:'Spricht...',uiProcessing:'Verarbeitung...',uiConnectionError:'Verbindungsfehler. Bitte erneut versuchen.',uiNoResult:'Noch kein Ergebnis.',uiNoWords:'Noch keine Wörter',uiSpeechNotSupported:'Spracherkennung wird von diesem Browser nicht unterstützt.',uiImageModel:'Bildmodell',uiDownload:'Herunterladen',uiOpenFull:'In voller Größe öffnen',uiRemoveImage:'Bild entfernen',cookieText:'Wir verwenden ein kleines Cookie, um deine Sprache und Einstellungen zu speichern. Kein Tracking, keine Werbung.'
+},
+Italiano: {
+home:'Home',features:'Funzioni',profile:'Profilo',plans:'Piani',login:'Accedi',start:'Inizia',badge:'IN ARRIVO 2027',
+intelligence:'intelligenza',intuition:'intuizione',quote:'"L\u2019IA che ascolta prima che tu parli"',
+heroDesc:'6 funzioni potenti, 9 lingue, riconoscimento vocale e avatar Luni. MEILUN è il tuo compagno intelligente per lavoro, studio e creatività.',
+try:'Prova MEILUN',learn:'Scopri di più',stat1:'Funzioni',stat2:'Lingue',stat3:'Disponibilità',stat4:'Possibilità',chooseModel:'Scegli il modello IA',
+featuresTitle:'Funzioni',featuresSub:'Esplora tutte le 6 funzioni principali di MEILUN',
+f1:'Generatore di idee',f2:'Generatore di foto',f3:'Assistente allo studio',f4:'Generatore di codice',f5:'Pratica delle lingue',f6:'Traduttore',
+profileTitle:'Profilo',profileSub:'La tua dashboard personale',notSigned:'Non connesso',messagesCount:'messaggi',generationsCount:'generazioni',
+wordsLearned:'parole apprese',registerDate:'registrato',signInBtn:'Accedi',logoutBtn:'Esci',
+plansTitle:'Piani di abbonamento',plansSub:'Scegli il piano che fa per te',planFree:'Gratuito',planPro:'Pro',planUltra:'Ultra',
+free1:'100 messaggi/giorno',free2:'5 generazioni foto/giorno',free3:'4 modelli IA',pro1:'500 messaggi/giorno',pro2:'20 generazioni foto/giorno',pro3:'Tutti i modelli IA',
+ultra1:'Messaggi illimitati',ultra2:'50 generazioni foto/giorno',ultra3:'Tutti i modelli IA',ultra4:'Supporto prioritario',currentPlan:'Corrente',upgrade:'Aggiorna',
+loginTitle:'Accedi',loginSub:'Bentornato su MEILUN',loginBtn:'Accedi',
+noAccount:'Non hai un account?',signUpLink:'Registrati',registerTitle:'Crea account',registerSub:'Unisciti a MEILUN e sblocca tutte le funzionalità',
+registerBtn:'Crea account',haveAccount:'Hai già un account?',loginLink:'Accedi',namePlaceholder:'Nome utente',
+emailPlaceholder:'Email',passwordPlaceholder:'Password',ageConfirm:'Creando un account, confermi di avere almeno 14 anni.',
+privacyAgree:'Continuando, accetti la nostra Informativa sulla privacy',ideas:'Generatore di idee',categories:'Categorie',
+enterTopic:'Inserisci argomento...',generate:'Genera',photo:'Generatore di foto',describeImage:'Descrivi cosa vuoi vedere',
+chooseStyle:'Scegli uno stile',chooseFormat:'Scegli un formato',generatePhoto:'Genera foto',photoPlaceholder:'Scrivi una descrizione...',
+study:'Assistente allo studio',school:'Chi sei?',subject:'Materia / Esame',mode:'Modalità',topic:'Argomento',
+enterTopicStudy:'Inserisci argomento...',explain:'Spiegare',practice:'Praticare',test:'Test',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Generatore di codice',language:'Linguaggio',describeTask:'Descrivi il compito',codePlaceholder:'Scrivi cosa deve essere fatto...',
+languages:'Pratica delle lingue',level:'Livello',theme:'Tema',chooseLanguageLabel:'Lingua',langChoose:'Scegli la lingua da imparare',
+iKnow:'Lo so',iDontKnow:'Non lo so',translator:'Traduttore',fromLanguage:'Dalla lingua',toLanguage:'Alla lingua',
+translate:'Traduci',translatePlaceholder:'Inserisci testo da tradurre...',voice:'Chat vocale',voiceDesc:'Parla con Luni usando la tua voce',
+tapToSpeak:'Tocca per parlare',voiceHello:'Ti ascolto. Chiedimi qualsiasi cosa!',aboutTitle:'Chi siamo',aboutDesc:'L\u2019assistente IA di nuova generazione',
+aboutText:'MEILUN è un assistente IA di nuova generazione progettato per semplificare le tue attività quotidiane.',
+modelsLabel:'Modelli IA:',coming:'Presto su Google Play e App Store nel 2027.',tryChat:'CHAT',aiHello:'Ciao! Chiedimi qualsiasi cosa.',
+chatPlaceholder:'Scrivi un messaggio...',studyChatHello:'Chiedimi dei tuoi studi!',studyChatPlaceholder:'Chiedere informazioni sullo studio...',
+photoChatHello:'Descrivi cosa vuoi vedere!',photoChatPlaceholder:'Chiedere informazioni sulla generazione di foto...',
+ideaChatHello:'Chiedimi delle idee!',ideaChatPlaceholder:'Chiedere informazioni sulle idee...',codeChatHello:'Chiedimi del codice!',codeChatPlaceholder:'Chiedere informazioni sul codice...',
+langChatHello:'Pratichiamo la tua lingua!',langChatPlaceholder:'Pratica: scrivi una frase...',
+transChatHello:'Chiedimi delle traduzioni!',transChatPlaceholder:'Chiedere informazioni sulla traduzione...',
+footerStore:'Presto su Google Play e App Store — 2027',footerPrivacy:'Informativa sulla privacy',leaveFeedback:'Lascia un feedback',
+errorFillFields:'Per favore, compila tutti i campi.',errorEmailInvalid:'Indirizzo email non valido.',errorPasswordShort:'La password deve essere di almeno 6 caratteri.',
+errorLimitReached:'Limite giornaliero raggiunto.',chat:'Chat',githubBtn:'Continua con GitHub',uiThinking:'L\u2019IA sta pensando...',uiListening:'In ascolto...',uiSpeaking:'Sta parlando...',uiProcessing:'Elaborazione...',uiConnectionError:'Errore di connessione. Riprova.',uiNoResult:'Nessun risultato ancora.',uiNoWords:'Ancora nessuna parola',uiSpeechNotSupported:'Il riconoscimento vocale non è supportato da questo browser.',uiImageModel:'Modello immagine',uiDownload:'Scarica',uiOpenFull:'Apri a grandezza intera',uiRemoveImage:'Rimuovi immagine',cookieText:'Utilizziamo un piccolo cookie per ricordare la tua lingua e le tue preferenze. Nessun tracciamento o pubblicità.'
+},
+Português: {
+home:'Início',features:'Funcionalidades',profile:'Perfil',plans:'Planos',login:'Entrar',start:'Começar',badge:'EM BREVE 2027',
+intelligence:'inteligência',intuition:'intuição',quote:'"A IA que escuta antes de você falar"',
+heroDesc:'6 funções poderosas, 9 idiomas, reconhecimento de voz e avatar Luni. MEILUN é seu companheiro inteligente para trabalho, estudo e criatividade.',
+try:'Experimentar MEILUN',learn:'Saiba mais',stat1:'Funções',stat2:'Idiomas',stat3:'Disponibilidade',stat4:'Possibilidades',chooseModel:'Escolha o modelo IA',
+featuresTitle:'Funcionalidades',featuresSub:'Explore todas as 6 funções principais do MEILUN',
+f1:'Gerador de ideias',f2:'Gerador de fotos',f3:'Assistente de estudo',f4:'Gerador de código',f5:'Prática de idiomas',f6:'Tradutor',
+profileTitle:'Perfil',profileSub:'Seu painel pessoal',notSigned:'Não conectado',messagesCount:'mensagens',generationsCount:'gerações',
+wordsLearned:'palavras aprendidas',registerDate:'registrado',signInBtn:'Entrar',logoutBtn:'Sair',
+plansTitle:'Planos de assinatura',plansSub:'Escolha o plano que melhor se adequa a você',planFree:'Grátis',planPro:'Pro',planUltra:'Ultra',
+free1:'100 mensagens/dia',free2:'5 gerações de foto/dia',free3:'4 modelos IA',pro1:'500 mensagens/dia',pro2:'20 gerações de foto/dia',pro3:'Todos os modelos IA',
+ultra1:'Mensagens ilimitadas',ultra2:'50 gerações de foto/dia',ultra3:'Todos os modelos IA',ultra4:'Suporte prioritário',currentPlan:'Atual',upgrade:'Atualizar',
+loginTitle:'Entrar',loginSub:'Bem-vindo de volta ao MEILUN',loginBtn:'Entrar',
+noAccount:'Não tem conta?',signUpLink:'Registrar-se',registerTitle:'Criar conta',registerSub:'Junte-se ao MEILUN e desbloqueie todas as funcionalidades',
+registerBtn:'Criar conta',haveAccount:'Já tem conta?',loginLink:'Entrar',namePlaceholder:'Nome de usuário',
+emailPlaceholder:'Email',passwordPlaceholder:'Senha',ageConfirm:'Ao criar uma conta, você confirma que tem pelo menos 14 anos.',
+privacyAgree:'Ao continuar, você concorda com nossa Política de Privacidade',ideas:'Gerador de ideias',categories:'Categorias',
+enterTopic:'Digite o tópico...',generate:'Gerar',photo:'Gerador de fotos',describeImage:'Descreva o que você quer ver',
+chooseStyle:'Escolha um estilo',chooseFormat:'Escolha um formato',generatePhoto:'Gerar foto',photoPlaceholder:'Escreva uma descrição...',
+study:'Assistente de estudo',school:'Quem é você?',subject:'Assunto / Exame',mode:'Modo',topic:'Tópico',
+enterTopicStudy:'Digite o tópico...',explain:'Explicar',practice:'Praticar',test:'Teste',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'Gerador de código',language:'Linguagem',describeTask:'Descreva a tarefa',codePlaceholder:'Escreva o que precisa ser feito...',
+languages:'Prática de idiomas',level:'Nível',theme:'Tema',chooseLanguageLabel:'Idioma',langChoose:'Escolha o idioma para aprender',
+iKnow:'Eu sei',iDontKnow:'Não sei',translator:'Tradutor',fromLanguage:'Do idioma',toLanguage:'Para o idioma',
+translate:'Traduzir',translatePlaceholder:'Digite o texto para traduzir...',voice:'Chat de voz',voiceDesc:'Converse com Luni usando sua voz',
+tapToSpeak:'Toque para falar',voiceHello:'Estou ouvindo. Pergunte-me qualquer coisa!',aboutTitle:'Sobre MEILUN',aboutDesc:'O assistente de IA de nova geração',
+aboutText:'MEILUN é um assistente de IA de nova geração projetado para simplificar suas tarefas diárias.',
+modelsLabel:'Modelos IA:',coming:'Em breve no Google Play e App Store em 2027.',tryChat:'CHAT',aiHello:'Olá! Pergunte-me qualquer coisa.',
+chatPlaceholder:'Escreva uma mensagem...',studyChatHello:'Pergunte-me sobre seus estudos!',studyChatPlaceholder:'Perguntar sobre estudos...',
+photoChatHello:'Descreva o que você quer ver!',photoChatPlaceholder:'Perguntar sobre geração de fotos...',
+ideaChatHello:'Pergunte-me sobre ideias!',ideaChatPlaceholder:'Perguntar sobre ideias...',codeChatHello:'Pergunte-me sobre código!',codeChatPlaceholder:'Perguntar sobre código...',
+langChatHello:'Vamos praticar seu idioma!',langChatPlaceholder:'Prática: escreva uma frase...',
+transChatHello:'Pergunte-me sobre traduções!',transChatPlaceholder:'Perguntar sobre tradução...',
+footerStore:'Em breve no Google Play e App Store — 2027',footerPrivacy:'Política de Privacidade',leaveFeedback:'Deixar feedback',
+errorFillFields:'Por favor, preencha todos os campos.',errorEmailInvalid:'Endereço de email inválido.',errorPasswordShort:'A senha deve ter pelo menos 6 caracteres.',
+errorLimitReached:'Limite diário atingido.',chat:'Chat',githubBtn:'Continuar com GitHub',uiThinking:'A IA está pensando...',uiListening:'Ouvindo...',uiSpeaking:'Falando...',uiProcessing:'Processando...',uiConnectionError:'Erro de conexão. Tente novamente.',uiNoResult:'Ainda sem resultado.',uiNoWords:'Ainda sem palavras',uiSpeechNotSupported:'O reconhecimento de voz não é compatível com este navegador.',uiImageModel:'Modelo de imagem',uiDownload:'Baixar',uiOpenFull:'Ver tamanho completo',uiRemoveImage:'Remover imagem',cookieText:'Usamos um pequeno cookie para lembrar seu idioma e preferências. Sem rastreamento ou anúncios.'
+},
+中文: {
+home:'主页',features:'功能',profile:'个人资料',plans:'套餐',login:'登录',start:'开始',badge:'2027年即将推出',
+intelligence:'智能',intuition:'直觉',quote:'"在您开口之前就倾听的AI"',
+heroDesc:'6项强大功能，9种语言，语音识别和虚拟形象Luni。MEILUN是您工作、学习和创意方面的智能伴侣。',
+try:'试用MEILUN',learn:'了解更多',stat1:'功能',stat2:'语言',stat3:'可用性',stat4:'可能性',chooseModel:'选择AI模型',
+featuresTitle:'功能',featuresSub:'探索MEILUN全部6项核心功能',
+f1:'创意生成器',f2:'照片生成器',f3:'学习助手',f4:'代码生成器',f5:'语言练习',f6:'翻译器',
+profileTitle:'个人资料',profileSub:'您的个人仪表板',notSigned:'未登录',messagesCount:'消息',generationsCount:'生成次数',
+wordsLearned:'已学单词',registerDate:'注册日期',signInBtn:'登录',logoutBtn:'登出',
+plansTitle:'订阅套餐',plansSub:'选择适合您的套餐',planFree:'免费',planPro:'专业版',planUltra:'至尊版',
+free1:'每天100条消息',free2:'每天5次照片生成',free3:'4种AI模型',pro1:'每天500条消息',pro2:'每天20次照片生成',pro3:'所有AI模型',
+ultra1:'无限消息',ultra2:'每天50次照片生成',ultra3:'所有AI模型',ultra4:'优先支持',currentPlan:'当前',upgrade:'升级',
+loginTitle:'登录',loginSub:'欢迎回到MEILUN',loginBtn:'登录',
+noAccount:'没有账号？',signUpLink:'注册',registerTitle:'创建账号',registerSub:'加入MEILUN，解锁所有功能',
+registerBtn:'创建账号',haveAccount:'已有账号？',loginLink:'登录',namePlaceholder:'用户名',
+emailPlaceholder:'电子邮件',passwordPlaceholder:'密码',ageConfirm:'创建账号即表示您确认已年满14周岁。',
+privacyAgree:'继续即表示您同意我们的隐私政策',ideas:'创意生成器',categories:'类别',
+enterTopic:'输入主题...',generate:'生成',photo:'照片生成器',describeImage:'描述您想看到的画面',
+chooseStyle:'选择风格',chooseFormat:'选择格式',generatePhoto:'生成照片',photoPlaceholder:'写描述...',
+study:'学习助手',school:'您是谁？',subject:'科目 / 考试',mode:'模式',topic:'主题',
+enterTopicStudy:'输入主题...',explain:'讲解',practice:'练习',test:'测试',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'代码生成器',language:'语言',describeTask:'描述任务',codePlaceholder:'写下需要做什么...',
+languages:'语言练习',level:'等级',theme:'主题',chooseLanguageLabel:'语言',langChoose:'选择要学习的语言',
+iKnow:'我知道',iDontKnow:'我不知道',translator:'翻译器',fromLanguage:'从语言',toLanguage:'到语言',
+translate:'翻译',translatePlaceholder:'输入要翻译的文本...',voice:'语音聊天',voiceDesc:'用您的声音与Luni对话',
+tapToSpeak:'点击说话',voiceHello:'我在听。问任何问题吧！',aboutTitle:'关于MEILUN',aboutDesc:'新一代AI助手',
+aboutText:'MEILUN是新一代AI助手，旨在简化您的日常任务。',
+modelsLabel:'AI模型:',coming:'将于2027年在Google Play和App Store上线。',tryChat:'聊天',aiHello:'你好！请问有什么可以帮您？',
+chatPlaceholder:'输入消息...',studyChatHello:'问我关于学习的问题！',studyChatPlaceholder:'询问学习问题...',
+photoChatHello:'描述你想看到的内容！',photoChatPlaceholder:'询问照片生成...',
+ideaChatHello:'问我关于创意的问题！',ideaChatPlaceholder:'询问创意...',codeChatHello:'问我关于代码的问题！',codeChatPlaceholder:'询问代码...',
+langChatHello:'让我们练习你的语言！',langChatPlaceholder:'练习：写一个句子...',
+transChatHello:'问我关于翻译的问题！',transChatPlaceholder:'询问翻译...',
+footerStore:'即将在Google Play和App Store上线',footerPrivacy:'隐私政策',leaveFeedback:'留下反馈',
+errorFillFields:'请填写所有字段。',errorEmailInvalid:'电子邮件地址无效。',errorPasswordShort:'密码必须至少6个字符。',
+errorLimitReached:'已达到每日限额。',chat:'聊天',githubBtn:'使用 GitHub 继续',uiThinking:'AI 正在思考...',uiListening:'正在聆听...',uiSpeaking:'正在说话...',uiProcessing:'处理中...',uiConnectionError:'连接错误，请重试。',uiNoResult:'暂无结果。',uiNoWords:'暂无单词',uiSpeechNotSupported:'此浏览器不支持语音识别。',uiImageModel:'图像模型',uiDownload:'下载',uiOpenFull:'查看原图',uiRemoveImage:'移除图片',cookieText:'我们使用一个小型 cookie 来记住您的语言和偏好设置，不做任何追踪或广告。'
+},
+日本語: {
+home:'ホーム',features:'機能',profile:'プロフィール',plans:'プラン',login:'ログイン',start:'始める',badge:'2027年登場',
+intelligence:'インテリジェンス',intuition:'直感',quote:'"あなたが話す前に聴くAI"',
+heroDesc:'6つの強力な機能、9言語、音声認識、アバターLuni。MEILUNは仕事、勉強、創造性のためのインテリジェントなコンパニオンです。',
+try:'MEILUNを試す',learn:'詳細を見る',stat1:'機能',stat2:'言語',stat3:'利用可能',stat4:'可能性',chooseModel:'AIモデルを選択',
+featuresTitle:'機能',featuresSub:'MEILUNの6つのコア機能をすべて探索',
+f1:'アイデアジェネレーター',f2:'フォトジェネレーター',f3:'学習アシスタント',f4:'コードジェネレーター',f5:'言語練習',f6:'翻訳',
+profileTitle:'プロフィール',profileSub:'あなたの個人ダッシュボード',notSigned:'ログインしていません',messagesCount:'メッセージ',generationsCount:'生成回数',
+wordsLearned:'学習した単語',registerDate:'登録日',signInBtn:'ログイン',logoutBtn:'ログアウト',
+plansTitle:'サブスクリプションプラン',plansSub:'あなたに合ったプランを選択',planFree:'無料',planPro:'プロ',planUltra:'ウルトラ',
+free1:'1日100メッセージ',free2:'1日5回の写真生成',free3:'4つのAIモデル',pro1:'1日500メッセージ',pro2:'1日20回の写真生成',pro3:'すべてのAIモデル',
+ultra1:'メッセージ無制限',ultra2:'1日50回の写真生成',ultra3:'すべてのAIモデル',ultra4:'優先サポート',currentPlan:'現在',upgrade:'アップグレード',
+loginTitle:'ログイン',loginSub:'MEILUNへようこそ',loginBtn:'ログイン',
+noAccount:'アカウントをお持ちでない方',signUpLink:'登録',registerTitle:'アカウント作成',registerSub:'MEILUNに参加してすべての機能を解除',
+registerBtn:'アカウント作成',haveAccount:'すでにアカウントをお持ちの方',loginLink:'ログイン',namePlaceholder:'ユーザー名',
+emailPlaceholder:'メール',passwordPlaceholder:'パスワード',ageConfirm:'アカウントを作成することで、14歳以上であることを確認します。',
+privacyAgree:'続行すると、プライバシーポリシーに同意したことになります',ideas:'アイデアジェネレーター',categories:'カテゴリー',
+enterTopic:'トピックを入力...',generate:'生成',photo:'フォトジェネレーター',describeImage:'見たいものを説明',
+chooseStyle:'スタイルを選択',chooseFormat:'フォーマットを選択',generatePhoto:'写真を生成',photoPlaceholder:'説明を書く...',
+study:'学習アシスタント',school:'あなたは誰？',subject:'科目 / 試験',mode:'モード',topic:'トピック',
+enterTopicStudy:'トピックを入力...',explain:'説明',practice:'練習',test:'テスト',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'コードジェネレーター',language:'言語',describeTask:'タスクを説明',codePlaceholder:'何をする必要があるか書いてください...',
+languages:'言語練習',level:'レベル',theme:'テーマ',chooseLanguageLabel:'言語',langChoose:'学ぶ言語を選択',
+iKnow:'知っている',iDontKnow:'知らない',translator:'翻訳',fromLanguage:'元の言語',toLanguage:'翻訳先言語',
+translate:'翻訳',translatePlaceholder:'翻訳するテキストを入力...',voice:'音声チャット',voiceDesc:'声でLuniと話す',
+tapToSpeak:'タップして話す',voiceHello:'聞いています。何でも質問してください！',aboutTitle:'MEILUNについて',aboutDesc:'次世代AIアシスタント',
+aboutText:'MEILUNは、日常業務を簡素化するために設計された次世代AIアシスタントです。',
+modelsLabel:'AIモデル:',coming:'2027年にGoogle PlayとApp Storeでリリース予定。',tryChat:'チャット',aiHello:'こんにちは！何でも質問してください。',
+chatPlaceholder:'メッセージを入力...',studyChatHello:'勉強について質問してください！',studyChatPlaceholder:'勉強について質問...',
+photoChatHello:'見たいものを説明してください！',photoChatPlaceholder:'写真生成について質問...',
+ideaChatHello:'アイデアについて質問してください！',ideaChatPlaceholder:'アイデアについて質問...',codeChatHello:'コードについて質問してください！',codeChatPlaceholder:'コードについて質問...',
+langChatHello:'言語を練習しましょう！',langChatPlaceholder:'練習：文章を入力...',
+transChatHello:'翻訳について質問してください！',transChatPlaceholder:'翻訳について質問...',
+footerStore:'Google PlayとApp Storeで近日公開',footerPrivacy:'プライバシーポリシー',leaveFeedback:'フィードバックを残す',
+errorFillFields:'すべてのフィールドに入力してください。',errorEmailInvalid:'無効なメールアドレスです。',errorPasswordShort:'パスワードは6文字以上である必要があります。',
+errorLimitReached:'1日の制限に達しました。',chat:'チャット',githubBtn:'GitHubで続ける',uiThinking:'AIが考えています...',uiListening:'聞いています...',uiSpeaking:'話しています...',uiProcessing:'処理中...',uiConnectionError:'接続エラーです。もう一度お試しください。',uiNoResult:'まだ結果がありません。',uiNoWords:'まだ単語がありません',uiSpeechNotSupported:'このブラウザは音声認識に対応していません。',uiImageModel:'画像モデル',uiDownload:'ダウンロード',uiOpenFull:'原寸大で開く',uiRemoveImage:'画像を削除',cookieText:'言語や設定を記憶するために小さなCookieを使用しています。追跡や広告には使用しません。'
+},
+한국어: {
+home:'홈',features:'기능',profile:'프로필',plans:'요금제',login:'로그인',start:'시작',badge:'2027년 출시 예정',
+intelligence:'인텔리전스',intuition:'직관',quote:'"당신이 말하기 전에 듣는 AI"',
+heroDesc:'6가지 강력한 기능, 9개 언어, 음성 인식, 아바타 Luni. MEILUN은 업무, 학습, 창의성을 위한 지능형 동반자입니다.',
+try:'MEILUN 사용해보기',learn:'자세히 알아보기',stat1:'기능',stat2:'언어',stat3:'이용 가능',stat4:'가능성',chooseModel:'AI 모델 선택',
+featuresTitle:'기능',featuresSub:'MEILUN의 6가지 핵심 기능 모두 살펴보기',
+f1:'아이디어 생성기',f2:'사진 생성기',f3:'학습 도우미',f4:'코드 생성기',f5:'언어 연습',f6:'번역기',
+profileTitle:'프로필',profileSub:'개인 대시보드',notSigned:'로그인되지 않음',messagesCount:'메시지',generationsCount:'생성 횟수',
+wordsLearned:'학습한 단어',registerDate:'등록일',signInBtn:'로그인',logoutBtn:'로그아웃',
+plansTitle:'구독 요금제',plansSub:'당신에게 맞는 요금제 선택',planFree:'무료',planPro:'프로',planUltra:'울트라',
+free1:'일일 100개 메시지',free2:'일일 5회 사진 생성',free3:'4개 AI 모델',pro1:'일일 500개 메시지',pro2:'일일 20회 사진 생성',pro3:'모든 AI 모델',
+ultra1:'무제한 메시지',ultra2:'일일 50회 사진 생성',ultra3:'모든 AI 모델',ultra4:'우선 지원',currentPlan:'현재',upgrade:'업그레이드',
+loginTitle:'로그인',loginSub:'MEILUN에 다시 오신 것을 환영합니다',loginBtn:'로그인',
+noAccount:'계정이 없으신가요?',signUpLink:'가입하기',registerTitle:'계정 만들기',registerSub:'MEILUN에 가입하고 모든 기능을 잠금 해제하세요',
+registerBtn:'계정 만들기',haveAccount:'이미 계정이 있으신가요?',loginLink:'로그인',namePlaceholder:'사용자명',
+emailPlaceholder:'이메일',passwordPlaceholder:'비밀번호',ageConfirm:'계정을 생성하면 14세 이상임을 확인하는 것입니다.',
+privacyAgree:'계속하면 개인정보처리방침에 동의하는 것입니다',ideas:'아이디어 생성기',categories:'카테고리',
+enterTopic:'주제 입력...',generate:'생성',photo:'사진 생성기',describeImage:'보고 싶은 이미지 설명',
+chooseStyle:'스타일 선택',chooseFormat:'형식 선택',generatePhoto:'사진 생성',photoPlaceholder:'설명 작성...',
+study:'학습 도우미',school:'당신은 누구인가요?',subject:'과목 / 시험',mode:'모드',topic:'주제',
+enterTopicStudy:'주제 입력...',explain:'설명',practice:'연습',test:'테스트',
+examToefl:'TOEFL',examIelts:'IELTS',examCsca:'CSCA',examGmat:'GMAT',examGre:'GRE',examSat:'SAT',
+code:'코드 생성기',language:'언어',describeTask:'작업 설명',codePlaceholder:'해야 할 일을 작성하세요...',
+languages:'언어 연습',level:'레벨',theme:'테마',chooseLanguageLabel:'언어',langChoose:'배울 언어 선택',
+iKnow:'알아요',iDontKnow:'몰라요',translator:'번역기',fromLanguage:'원본 언어',toLanguage:'대상 언어',
+translate:'번역',translatePlaceholder:'번역할 텍스트 입력...',voice:'음성 채팅',voiceDesc:'음성으로 Luni와 대화하세요',
+tapToSpeak:'탭하여 말하기',voiceHello:'듣고 있습니다. 무엇이든 물어보세요!',aboutTitle:'MEILUN 소개',aboutDesc:'차세대 AI 어시스턴트',
+aboutText:'MEILUN은 일상 업무를 간소화하기 위해 설계된 차세대 AI 어시스턴트입니다.',
+modelsLabel:'AI 모델:',coming:'2027년 Google Play와 App Store에 출시 예정입니다.',tryChat:'채팅',aiHello:'안녕하세요! 무엇이든 물어보세요.',
+chatPlaceholder:'메시지를 입력하세요...',studyChatHello:'학습에 대해 물어보세요!',studyChatPlaceholder:'학습에 대해 질문...',
+photoChatHello:'보고 싶은 것을 설명하세요!',photoChatPlaceholder:'사진 생성에 대해 질문...',
+ideaChatHello:'아이디어에 대해 물어보세요!',ideaChatPlaceholder:'아이디어에 대해 질문...',codeChatHello:'코드에 대해 물어보세요!',codeChatPlaceholder:'코드에 대해 질문...',
+langChatHello:'언어를 연습해 봅시다!',langChatPlaceholder:'연습: 문장 입력...',
+transChatHello:'번역에 대해 물어보세요!',transChatPlaceholder:'번역에 대해 질문...',
+footerStore:'Google Play와 App Store에서 곧 출시',footerPrivacy:'개인정보처리방침',leaveFeedback:'피드백 남기기',
+errorFillFields:'모든 필드를 입력해주세요.',errorEmailInvalid:'잘못된 이메일 주소입니다.',errorPasswordShort:'비밀번호는 최소 6자 이상이어야 합니다.',
+errorLimitReached:'일일 한도에 도달했습니다.',chat:'채팅',githubBtn:'GitHub로 계속하기',uiThinking:'AI가 생각 중입니다...',uiListening:'듣는 중...',uiSpeaking:'말하는 중...',uiProcessing:'처리 중...',uiConnectionError:'연결 오류입니다. 다시 시도해 주세요.',uiNoResult:'아직 결과가 없습니다.',uiNoWords:'아직 단어가 없습니다',uiSpeechNotSupported:'이 브라우저에서는 음성 인식을 지원하지 않습니다.',uiImageModel:'이미지 모델',uiDownload:'다운로드',uiOpenFull:'원본 크기로 보기',uiRemoveImage:'이미지 제거',cookieText:'언어와 환경설정을 기억하기 위해 작은 쿠키를 사용합니다. 추적이나 광고에는 사용하지 않습니다.'
+}
+};
+// ===== ПЕРЕМЕННЫЕ =====
+let currentLang = 'English';
+let currentModel = 'openai/gpt-oss-120b';
+let currentImageModel = 'agnes-image-2.5-flash';
+let messagesCount = 0;
+let generationsCount = 0;
+let currentUser = null;
+let studyMode = 'explain';
+let selectedPlan = 'free';
+let isProcessing = false;
+let recognition = null;
+let pendingChatImage = null;
+let userWords = [];
+try { userWords = JSON.parse(localStorage.getItem('meilun_userWords')) || []; } catch(e) { userWords = []; }
+
+const API_BASE = 'https://meilun.de5.net';
+const langList = Object.keys(translations);
+const modelList = ['openai/gpt-oss-120b','openai/gpt-oss-20b','openai/gpt-oss-safeguard-20b','qwen/qwen3.6-27b','qwen/qwen3.8-27b','groq/compound','groq/compound-mini'];
+const imageModelList = ['agnes-image-2.0-flash','agnes-image-2.1-flash','agnes-image-2.5-flash'];
+const styleList = ['Realism','Cyberpunk','Anime','Minimalism','Watercolor','Fantasy','Space','Retro','Surrealism','Pop Art','Impressionism','Manga','Steampunk','Futurism','Vintage'];
+const formatList = ['1:1 Square','16:9 Landscape','9:16 Portrait','4:3 Classic','21:9 Cinema','5:4 Instagram'];
+const userTypes = ['For School','For Students','For Teachers'];
+const subjects = ['Mathematics','Physics','Chemistry','Biology','History','Literature','Philosophy','Art','Music','Computer Science'];
+const codeModesList = ['Code Generation','Code Check','Code Optimize','Explain Code'];
+const codeLanguages = ['Python','JavaScript','C++','Java','Go','Rust','Swift','Kotlin','PHP','C#','Ruby','SQL','HTML/CSS','TypeScript','Dart'];
+const langPracticeLangs = ['English','Spanish','French','German','Italian','Portuguese','Japanese','Korean','Russian','Chinese'];
+const levels = ['A1','A2','B1','B2','C1'];
+const themesList = ['Travel','Work','Family','Food','Shopping','Health','Education','Technology','Culture','Science'];
+const examList = ['TOEFL','IELTS','CSCA','GMAT','GRE','SAT'];
+const ideaCategoriesList = ['All','Business','Creative','Technology','Life','Education','Science','Art','Travel'];
+const translateLangs = ['English','Spanish','French','German','Italian','Portuguese','Japanese','Korean','Russian','Chinese'];
+const chipTranslations = {
+'All':{Русский:'Все',Español:'Todo',Francais:'Tout',Deutsch:'Alle',Italiano:'Tutto',Português:'Todos','中文':'全部','日本語':'すべて','한국어':'전체'},
+'Business':{Русский:'Бизнес',Español:'Negocios',Francais:'Affaires',Deutsch:'Business',Italiano:'Business',Português:'Negócios','中文':'商业','日本語':'ビジネス','한국어':'비즈니스'},
+'Creative':{Русский:'Творчество',Español:'Creativo',Francais:'Créatif',Deutsch:'Kreativ',Italiano:'Creativo',Português:'Criativo','中文':'创意','日本語':'クリエイティブ','한국어':'창의적'},
+'Technology':{Русский:'Технологии',Español:'Tecnología',Francais:'Technologie',Deutsch:'Technologie',Italiano:'Tecnologia',Português:'Tecnologia','中文':'科技','日本語':'テクノロジー','한국어':'기술'},
+'Life':{Русский:'Жизнь',Español:'Vida',Francais:'Vie',Deutsch:'Leben',Italiano:'Vita',Português:'Vida','中文':'生活','日本語':'生活','한국어':'생활'},
+'Education':{Русский:'Образование',Español:'Educación',Francais:'Éducation',Deutsch:'Bildung',Italiano:'Istruzione',Português:'Educação','中文':'教育','日本語':'教育','한국어':'교육'},
+'Science':{Русский:'Наука',Español:'Ciencia',Francais:'Science',Deutsch:'Wissenschaft',Italiano:'Scienza',Português:'Ciência','中文':'科学','日本語':'科学','한국어':'과학'},
+'Art':{Русский:'Искусство',Español:'Arte',Francais:'Art',Deutsch:'Kunst',Italiano:'Arte',Português:'Arte','中文':'艺术','日本語':'アート','한국어':'예술'},
+'Travel':{Русский:'Путешествия',Español:'Viajes',Francais:'Voyage',Deutsch:'Reisen',Italiano:'Viaggi',Português:'Viagem','中文':'旅行','日本語':'旅行','한국어':'여행'},
+'Realism':{Русский:'Реализм',Español:'Realismo',Francais:'Réalisme',Deutsch:'Realismus',Italiano:'Realismo',Português:'Realismo','中文':'写实','日本語':'リアリズム','한국어':'사실주의'},
+'Cyberpunk':{Русский:'Киберпанк',Español:'Cyberpunk',Francais:'Cyberpunk',Deutsch:'Cyberpunk',Italiano:'Cyberpunk',Português:'Cyberpunk','中文':'赛博朋克','日本語':'サイバーパンク','한국어':'사이버펑크'},
+'Anime':{Русский:'Аниме',Español:'Anime',Francais:'Anime',Deutsch:'Anime',Italiano:'Anime',Português:'Anime','中文':'动漫','日本語':'アニメ','한국어':'애니메이션'},
+'Minimalism':{Русский:'Минимализм',Español:'Minimalismo',Francais:'Minimalisme',Deutsch:'Minimalismus',Italiano:'Minimalismo',Português:'Minimalismo','中文':'极简主义','日本語':'ミニマリズム','한국어':'미니멀리즘'},
+'Watercolor':{Русский:'Акварель',Español:'Acuarela',Francais:'Aquarelle',Deutsch:'Aquarell',Italiano:'Acquerello',Português:'Aquarela','中文':'水彩','日本語':'水彩画','한국어':'수채화'},
+'Fantasy':{Русский:'Фэнтези',Español:'Fantasía',Francais:'Fantaisie',Deutsch:'Fantasy',Italiano:'Fantasy',Português:'Fantasia','中文':'奇幻','日本語':'ファンタジー','한국어':'판타지'},
+'Space':{Русский:'Космос',Español:'Espacio',Francais:'Espace',Deutsch:'Weltraum',Italiano:'Spazio',Português:'Espaço','中文':'太空','日本語':'宇宙','한국어':'우주'},
+'Retro':{Русский:'Ретро',Español:'Retro',Francais:'Rétro',Deutsch:'Retro',Italiano:'Retro',Português:'Retrô','中文':'复古','日本語':'レトロ','한국어':'레트로'},
+'Surrealism':{Русский:'Сюрреализм',Español:'Surrealismo',Francais:'Surréalisme',Deutsch:'Surrealismus',Italiano:'Surrealismo',Português:'Surrealismo','中文':'超现实主义','日本語':'シュルレアリスム','한국어':'초현실주의'},
+'Pop Art':{Русский:'Поп-арт',Español:'Arte pop',Francais:'Pop Art',Deutsch:'Pop-Art',Italiano:'Pop Art',Português:'Pop Art','中文':'波普艺术','日本語':'ポップアート','한국어':'팝 아트'},
+'Impressionism':{Русский:'Импрессионизм',Español:'Impresionismo',Francais:'Impressionnisme',Deutsch:'Impressionismus',Italiano:'Impressionismo',Português:'Impressionismo','中文':'印象派','日本語':'印象派','한국어':'인상주의'},
+'Manga':{Русский:'Манга',Español:'Manga',Francais:'Manga',Deutsch:'Manga',Italiano:'Manga',Português:'Mangá','中文':'漫画','日本語':'漫画','한국어':'망가'},
+'Steampunk':{Русский:'Стимпанк',Español:'Steampunk',Francais:'Steampunk',Deutsch:'Steampunk',Italiano:'Steampunk',Português:'Steampunk','中文':'蒸汽朋克','日本語':'スチームパンク','한국어':'스팀펑크'},
+'Futurism':{Русский:'Футуризм',Español:'Futurismo',Francais:'Futurisme',Deutsch:'Futurismus',Italiano:'Futurismo',Português:'Futurismo','中文':'未来主义','日本語':'未来派','한국어':'미래주의'},
+'Vintage':{Русский:'Винтаж',Español:'Vintage',Francais:'Vintage',Deutsch:'Vintage',Italiano:'Vintage',Português:'Vintage','中文':'复古风','日本語':'ヴィンテージ','한국어':'빈티지'},
+'1:1 Square':{Русский:'1:1 Квадрат',Español:'1:1 Cuadrado',Francais:'1:1 Carré',Deutsch:'1:1 Quadrat',Italiano:'1:1 Quadrato',Português:'1:1 Quadrado','中文':'1:1 正方形','日本語':'1:1 正方形','한국어':'1:1 정사각형'},
+'16:9 Landscape':{Русский:'16:9 Альбомная',Español:'16:9 Horizontal',Francais:'16:9 Paysage',Deutsch:'16:9 Querformat',Italiano:'16:9 Orizzontale',Português:'16:9 Paisagem','中文':'16:9 横向','日本語':'16:9 横向き','한국어':'16:9 가로'},
+'9:16 Portrait':{Русский:'9:16 Портретная',Español:'9:16 Vertical',Francais:'9:16 Portrait',Deutsch:'9:16 Hochformat',Italiano:'9:16 Verticale',Português:'9:16 Retrato','中文':'9:16 纵向','日本語':'9:16 縦向き','한국어':'9:16 세로'},
+'4:3 Classic':{Русский:'4:3 Классика',Español:'4:3 Clásico',Francais:'4:3 Classique',Deutsch:'4:3 Klassisch',Italiano:'4:3 Classico',Português:'4:3 Clássico','中文':'4:3 经典','日本語':'4:3 クラシック','한국어':'4:3 클래식'},
+'21:9 Cinema':{Русский:'21:9 Кино',Español:'21:9 Cine',Francais:'21:9 Cinéma',Deutsch:'21:9 Kino',Italiano:'21:9 Cinema',Português:'21:9 Cinema','中文':'21:9 电影','日本語':'21:9 シネマ','한국어':'21:9 시네마'},
+'5:4 Instagram':{Русский:'5:4 Instagram',Español:'5:4 Instagram',Francais:'5:4 Instagram',Deutsch:'5:4 Instagram',Italiano:'5:4 Instagram',Português:'5:4 Instagram','中文':'5:4 Instagram','日本語':'5:4 Instagram','한국어':'5:4 인스타그램'},
+'For School':{Русский:'Для школы',Español:'Para la escuela',Francais:'Pour l\u2019école',Deutsch:'Für die Schule',Italiano:'Per la scuola',Português:'Para a escola','中文':'适用于学校','日本語':'学校向け','한국어':'학교용'},
+'For Students':{Русский:'Для студентов',Español:'Para estudiantes',Francais:'Pour étudiants',Deutsch:'Für Studenten',Italiano:'Per studenti',Português:'Para estudantes','中文':'适用于学生','日本語':'学生向け','한국어':'학생용'},
+'For Teachers':{Русский:'Для учителей',Español:'Para profesores',Francais:'Pour enseignants',Deutsch:'Für Lehrer',Italiano:'Per insegnanti',Português:'Para professores','中文':'适用于教师','日本語':'教師向け','한국어':'교사용'},
+'Mathematics':{Русский:'Математика',Español:'Matemáticas',Francais:'Mathématiques',Deutsch:'Mathematik',Italiano:'Matematica',Português:'Matemática','中文':'数学','日本語':'数学','한국어':'수학'},
+'Physics':{Русский:'Физика',Español:'Física',Francais:'Physique',Deutsch:'Physik',Italiano:'Fisica',Português:'Física','中文':'物理','日本語':'物理学','한국어':'물리학'},
+'Chemistry':{Русский:'Химия',Español:'Química',Francais:'Chimie',Deutsch:'Chemie',Italiano:'Chimica',Português:'Química','中文':'化学','日本語':'化学','한국어':'화학'},
+'Biology':{Русский:'Биология',Español:'Biología',Francais:'Biologie',Deutsch:'Biologie',Italiano:'Biologia',Português:'Biologia','中文':'生物','日本語':'生物学','한국어':'생물학'},
+'History':{Русский:'История',Español:'Historia',Francais:'Histoire',Deutsch:'Geschichte',Italiano:'Storia',Português:'História','中文':'历史','日本語':'歴史','한국어':'역사'},
+'Literature':{Русский:'Литература',Español:'Literatura',Francais:'Littérature',Deutsch:'Literatur',Italiano:'Letteratura',Português:'Literatura','中文':'文学','日本語':'文学','한국어':'문학'},
+'Philosophy':{Русский:'Философия',Español:'Filosofía',Francais:'Philosophie',Deutsch:'Philosophie',Italiano:'Filosofia',Português:'Filosofia','中文':'哲学','日本語':'哲学','한국어':'철학'},
+'Music':{Русский:'Музыка',Español:'Música',Francais:'Musique',Deutsch:'Musik',Italiano:'Musica',Português:'Música','中文':'音乐','日本語':'音楽','한국어':'음악'},
+'Computer Science':{Русский:'Информатика',Español:'Informática',Francais:'Informatique',Deutsch:'Informatik',Italiano:'Informatica',Português:'Ciência da Computação','中文':'计算机科学','日本語':'コンピュータサイエンス','한국어':'컴퓨터 과학'},
+'Work':{Русский:'Работа',Español:'Trabajo',Francais:'Travail',Deutsch:'Arbeit',Italiano:'Lavoro',Português:'Trabalho','中文':'工作','日本語':'仕事','한국어':'업무'},
+'Family':{Русский:'Семья',Español:'Familia',Francais:'Famille',Deutsch:'Familie',Italiano:'Famiglia',Português:'Família','中文':'家庭','日本語':'家族','한국어':'가족'},
+'Food':{Русский:'Еда',Español:'Comida',Francais:'Nourriture',Deutsch:'Essen',Italiano:'Cibo',Português:'Comida','中文':'食物','日本語':'食べ物','한국어':'음식'},
+'Shopping':{Русский:'Покупки',Español:'Compras',Francais:'Achats',Deutsch:'Einkaufen',Italiano:'Shopping',Português:'Compras','中文':'购物','日本語':'買い物','한국어':'쇼핑'},
+'Health':{Русский:'Здоровье',Español:'Salud',Francais:'Santé',Deutsch:'Gesundheit',Italiano:'Salute',Português:'Saúde','中文':'健康','日本語':'健康','한국어':'건강'},
+'Culture':{Русский:'Культура',Español:'Cultura',Francais:'Culture',Deutsch:'Kultur',Italiano:'Cultura',Português:'Cultura','中文':'文化','日本語':'文化','한국어':'문화'},
+'Code Generation':{Русский:'Генерация кода',Español:'Generación de código',Francais:'Génération de code',Deutsch:'Code-Generierung',Italiano:'Generazione codice',Português:'Geração de código','中文':'代码生成','日本語':'コード生成','한국어':'코드 생성'},
+'Code Check':{Русский:'Проверка кода',Español:'Revisión de código',Francais:'Vérification du code',Deutsch:'Code-Prüfung',Italiano:'Controllo codice',Português:'Verificação de código','中文':'代码检查','日本語':'コードチェック','한국어':'코드 검사'},
+'Code Optimize':{Русский:'Оптимизация кода',Español:'Optimizar código',Francais:'Optimiser le code',Deutsch:'Code optimieren',Italiano:'Ottimizza codice',Português:'Otimizar código','中文':'代码优化','日本語':'コード最適化','한국어':'코드 최적화'},
+'Explain Code':{Русский:'Объяснить код',Español:'Explicar código',Francais:'Expliquer le code',Deutsch:'Code erklären',Italiano:'Spiega codice',Português:'Explicar código','中文':'解释代码','日本語':'コードを説明','한국어':'코드 설명'},
+'English':{Русский:'Английский',Español:'Inglés',Francais:'Anglais',Deutsch:'Englisch',Italiano:'Inglese',Português:'Inglês','中文':'英语','日本語':'英語','한국어':'영어'},
+'Spanish':{Русский:'Испанский',Español:'Español',Francais:'Espagnol',Deutsch:'Spanisch',Italiano:'Spagnolo',Português:'Espanhol','中文':'西班牙语','日本語':'スペイン語','한국어':'스페인어'},
+'French':{Русский:'Французский',Español:'Francés',Francais:'Français',Deutsch:'Französisch',Italiano:'Francese',Português:'Francês','中文':'法语','日本語':'フランス語','한국어':'프랑스어'},
+'German':{Русский:'Немецкий',Español:'Alemán',Francais:'Allemand',Deutsch:'Deutsch',Italiano:'Tedesco',Português:'Alemão','中文':'德语','日本語':'ドイツ語','한국어':'독일어'},
+'Italian':{Русский:'Итальянский',Español:'Italiano',Francais:'Italien',Deutsch:'Italienisch',Italiano:'Italiano',Português:'Italiano','中文':'意大利语','日本語':'イタリア語','한국어':'이탈리아어'},
+'Portuguese':{Русский:'Португальский',Español:'Portugués',Francais:'Portugais',Deutsch:'Portugiesisch',Italiano:'Portoghese',Português:'Português','中文':'葡萄牙语','日本語':'ポルトガル語','한국어':'포르투갈어'},
+'Japanese':{Русский:'Японский',Español:'Japonés',Francais:'Japonais',Deutsch:'Japanisch',Italiano:'Giapponese',Português:'Japonês','中文':'日语','日本語':'日本語','한국어':'일본어'},
+'Korean':{Русский:'Корейский',Español:'Coreano',Francais:'Coréen',Deutsch:'Koreanisch',Italiano:'Coreano',Português:'Coreano','中文':'韩语','日本語':'韓国語','한국어':'한국어'},
+'Russian':{Русский:'Русский',Español:'Ruso',Francais:'Russe',Deutsch:'Russisch',Italiano:'Russo',Português:'Russo','中文':'俄语','日本語':'ロシア語','한국어':'러시아어'},
+'Chinese':{Русский:'Китайский',Español:'Chino',Francais:'Chinois',Deutsch:'Chinesisch',Italiano:'Cinese',Português:'Chinês','中文':'中文','日本語':'中国語','한국어':'중국어'}
+};
+
+const baseWordData = {
+  English: { Travel: [
+    {word:'Airplane',translation:'Самолёт',example:'I travel by plane.'},
+    {word:'Ticket',translation:'Билет',example:'I buy a ticket.'},
+    {word:'Passport',translation:'Паспорт',example:'Show your passport.'},
+    {word:'Hotel',translation:'Отель',example:'We stay at a hotel.'},
+    {word:'Luggage',translation:'Багаж',example:'My luggage is heavy.'}
+  ], Work: [
+    {word:'Meeting',translation:'Совещание',example:'We have a meeting at 10.'},
+    {word:'Task',translation:'Задача',example:'I need to finish this task.'}
+  ]},
+  Русский: { Travel: [
+    {word:'Самолёт',translation:'Airplane',example:'Я лечу на самолёте.'},
+    {word:'Билет',translation:'Ticket',example:'Я покупаю билет.'}
+  ]}
+};
+let langState = { language:'English', level:'A1', theme:'Travel', wordIndex:0, known:0 };
+
+function getWordData(){
+  const base = (baseWordData[langState.language] && baseWordData[langState.language][langState.theme]) || [];
+  const user = userWords.filter(w => w.language === langState.language && w.theme === langState.theme);
+  return [...base, ...user];
+}
+function getLang(){ return Object.assign({}, translations.English, translations[currentLang] || {}); }
+function escapeHtml(text){
+  const div = document.createElement('div');
+  div.textContent = String(text == null ? '' : text);
+  return div.innerHTML;
+}
+function sanitizeInput(text, maxLen){
+  return String(text || '').replace(/<[^>]*>/g,'').trim().slice(0, maxLen || 1000);
+}
+// ===== НАВИГАЦИЯ =====
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('page-' + p);
+  if (target) target.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  updateUI();
+}
+function showFeature(f){ showPage(f); }
+function scrollToChat(){
+  const section = document.getElementById('chatSection');
+  if (section){ section.scrollIntoView({behavior:'smooth'}); const input = document.getElementById('chatInput'); if (input) input.focus(); }
+}
+// ===== ОБНОВЛЕНИЕ UI =====
+function updateUI(){
+  const t = getLang();
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.getAttribute('data-key');
+    if (t[k] !== undefined){
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = t[k];
+      else el.textContent = t[k];
+    }
+  });
+  const nameEl = document.getElementById('profileName'); if (nameEl) nameEl.textContent = currentUser ? currentUser.name : 'Guest';
+  const emailEl = document.getElementById('profileEmail');
+  if (emailEl) emailEl.textContent = currentUser ? currentUser.email : (t.notSigned || 'Not signed in');
+  const avatarEl = document.getElementById('profileAvatar');
+  if (avatarEl) avatarEl.textContent = currentUser && currentUser.name ? currentUser.name.trim().charAt(0).toUpperCase() : 'G';
+  const planBadgeEl = document.getElementById('profilePlanBadge');
+  if (planBadgeEl){ const planKey = selectedPlan === 'ultra' ? 'planUltra' : selectedPlan === 'pro' ? 'planPro' : 'planFree'; planBadgeEl.textContent = t[planKey] || 'Free'; }
+  const signInBtn = document.getElementById('profileSignInBtn'); if (signInBtn) signInBtn.style.display = currentUser ? 'none' : 'inline-block';
+  const manageBtn = document.getElementById('profileManagePlanBtn'); if (manageBtn) manageBtn.style.display = currentUser ? 'inline-block' : 'none';
+  const logoutBtn = document.getElementById('logoutBtn'); if (logoutBtn) logoutBtn.style.display = currentUser ? 'inline-block' : 'none';
+  const msgEl = document.getElementById('statMessages'); if (msgEl) msgEl.textContent = messagesCount;
+  const genEl = document.getElementById('statGenerations'); if (genEl) genEl.textContent = generationsCount;
+  const wordsEl = document.getElementById('statWords'); if (wordsEl) wordsEl.textContent = userWords.length;
+  const dateEl = document.getElementById('statDate'); if (dateEl && currentUser) dateEl.textContent = new Date(currentUser.registered).toLocaleDateString();
+  const langNameEl = document.getElementById('langUserName'); if (langNameEl) langNameEl.textContent = currentUser ? currentUser.name : 'Guest';
+  const luniLabel = document.getElementById('luniLabel');
+  if (luniLabel && !luniLabel.dataset.speaking) luniLabel.textContent = t.tapToSpeak || 'Tap to speak';
+  renderAboutModels();
+}
+function renderAboutModels(){
+  const c = document.getElementById('aboutModelsList');
+  if (!c) return;
+  c.innerHTML = '';
+  modelList.concat(imageModelList).forEach(m => {
+    const span = document.createElement('span');
+    span.style.cssText = 'background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.1);padding:4px 14px;border-radius:16px;font-size:11px;color:#a78bfa;';
+    span.textContent = m;
+    c.appendChild(span);
+  });
+}
+// ===== РЕНДЕРЕРЫ =====
+function renderChips(containerId, items, selected, onClick, translateFn){
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  items.forEach(i => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip' + (i === selected ? ' active' : '');
+    btn.textContent = translateFn ? translateFn(i) : i;
+    btn.onclick = () => onClick(i);
+    container.appendChild(btn);
+  });
+}
+function tChip(term){
+  const dict = chipTranslations[term];
+  if (!dict) return term;
+  return dict[currentLang] || term;
+}
+function renderAllChips(){
+  renderIdeaCategories(); renderPhotoStyles(); renderPhotoFormats(); renderPhotoModelButtons();
+  renderStudyUserTypes(); renderStudySubjects(); renderCodeModes(); renderCodeLanguages();
+  renderLangPracticeLangs(); renderLangPracticeLevels(); renderLangPracticeThemes();
+  renderTranslatorFrom(); renderTranslatorTo(); renderModelButtons();
+}
+function renderModelButtons(){
+  const container = document.getElementById('modelRow');
+  if (!container) return;
+  container.innerHTML = '';
+  modelList.forEach(m => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'model-chip' + (m === currentModel ? ' active' : '');
+    btn.textContent = m;
+    btn.onclick = () => { currentModel = m; localStorage.setItem('meilun_model', m); renderModelButtons(); };
+    container.appendChild(btn);
+  });
+}
+function renderPhotoModelButtons(){
+  renderChips('photoModels', imageModelList, currentImageModel, (m) => {
+    currentImageModel = m; localStorage.setItem('meilun_image_model', m); renderPhotoModelButtons();
+  });
+}
+function renderLangButtons(){
+  const container = document.getElementById('langButtons');
+  if (!container) return;
+  container.innerHTML = '';
+  langList.forEach(l => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'lang-btn' + (l === currentLang ? ' active' : '');
+    btn.textContent = l;
+    btn.onclick = () => { currentLang = l; localStorage.setItem('meilun_lang', l); if (getCookie('meilun_cookie_consent') === 'accepted') setCookie('meilun_session_lang', l, 365); renderLangButtons(); renderLangButtonsTop(); updateUI(); renderAllChips(); };
+    container.appendChild(btn);
+  });
+}
+function renderLangButtonsTop(){
+  const container = document.getElementById('langButtonsTop');
+  if (!container) return;
+  container.innerHTML = '';
+  langList.forEach(l => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'lang-btn' + (l === currentLang ? ' active' : '');
+    btn.textContent = l;
+    btn.onclick = () => { currentLang = l; localStorage.setItem('meilun_lang', l); if (getCookie('meilun_cookie_consent') === 'accepted') setCookie('meilun_session_lang', l, 365); renderLangButtonsTop(); renderLangButtons(); updateUI(); renderAllChips(); };
+    container.appendChild(btn);
+  });
+}
+function renderIdeaCategories(){
+  renderChips('ideaCategories', ideaCategoriesList, document.getElementById('ideaInput')?.dataset.category || 'All', (c) => {
+    document.getElementById('ideaInput').dataset.category = c; renderIdeaCategories();
+  }, tChip);
+}
+function renderPhotoStyles(){
+  renderChips('photoStyles', styleList, document.getElementById('photoDesc')?.dataset.style || 'Realism', (s) => {
+    document.getElementById('photoDesc').dataset.style = s; renderPhotoStyles();
+  }, tChip);
+}
+function renderPhotoFormats(){
+  renderChips('photoFormats', formatList, document.getElementById('photoDesc')?.dataset.format || '16:9 Landscape', (f) => {
+    document.getElementById('photoDesc').dataset.format = f; renderPhotoFormats();
+  }, tChip);
+}
+function renderStudyUserTypes(){
+  renderChips('studyUserTypes', userTypes, document.getElementById('studyTopic')?.dataset.user || 'For School', (u) => {
+    document.getElementById('studyTopic').dataset.user = u; renderStudyUserTypes();
+  }, tChip);
+}
+function renderStudySubjects(){
+  renderChips('studySubjects', subjects, document.getElementById('studyTopic')?.dataset.subject || 'Mathematics', (s) => {
+    document.getElementById('studyTopic').dataset.subject = s; renderStudySubjects();
+  }, tChip);
+}
+function renderCodeModes(){
+  renderChips('codeModes', codeModesList, document.getElementById('codeTask')?.dataset.mode || 'Code Generation', (m) => {
+    document.getElementById('codeTask').dataset.mode = m; renderCodeModes();
+  }, tChip);
+}
+function renderCodeLanguages(){
+  renderChips('codeLanguages', codeLanguages, document.getElementById('codeTask')?.dataset.lang || 'Python', (l) => {
+    document.getElementById('codeTask').dataset.lang = l; renderCodeLanguages();
+  });
+}
+function renderLangPracticeLangs(){
+  renderChips('langPracticeLangs', langPracticeLangs, langState.language, (l) => {
+    langState.language = l; localStorage.setItem('meilun_langstate', JSON.stringify(langState));
+    langState.wordIndex = 0; renderLangPracticeLangs(); updateLangWord();
+  }, tChip);
+}
+function renderLangPracticeLevels(){
+  renderChips('langPracticeLevels', levels, langState.level, (l) => {
+    langState.level = l; localStorage.setItem('meilun_langstate', JSON.stringify(langState)); renderLangPracticeLevels();
+  });
+}
+function renderLangPracticeThemes(){
+  renderChips('langPracticeThemes', themesList, langState.theme, (th) => {
+    langState.theme = th; localStorage.setItem('meilun_langstate', JSON.stringify(langState));
+    langState.wordIndex = 0; renderLangPracticeThemes(); updateLangWord();
+  }, tChip);
+}
+function renderTranslatorFrom(){
+  renderChips('translatorFrom', translateLangs, document.getElementById('translateInput')?.dataset.from || 'English', (l) => {
+    document.getElementById('translateInput').dataset.from = l; renderTranslatorFrom();
+  }, tChip);
+}
+function renderTranslatorTo(){
+  renderChips('translatorTo', translateLangs, document.getElementById('translateInput')?.dataset.to || 'Russian', (l) => {
+    document.getElementById('translateInput').dataset.to = l; renderTranslatorTo();
+  }, tChip);
+}
+function updateLangWord(){
+  const words = getWordData();
+  const wordEl = document.getElementById('langWord'), trEl = document.getElementById('langTranslation'),
+        exEl = document.getElementById('langExample'), progEl = document.getElementById('langProgress');
+  if (!words.length){ wordEl.textContent = getLang().uiNoWords || 'No words yet'; trEl.textContent=''; exEl.textContent=''; progEl.textContent='0 / 0'; return; }
+  if (langState.wordIndex >= words.length) langState.wordIndex = 0;
+  const w = words[langState.wordIndex];
+  wordEl.textContent = w.word; trEl.textContent = w.translation; exEl.textContent = '"' + (w.example||'') + '"';
+  progEl.textContent = (langState.wordIndex+1) + ' / ' + words.length + ' words';
+}
+function langWordKnown(){
+  const words = getWordData(); if (!words.length) return;
+  const spoken = words[langState.wordIndex].word;
+  langState.known++; langState.wordIndex = (langState.wordIndex+1) % words.length;
+  localStorage.setItem('meilun_langstate', JSON.stringify(langState)); updateLangWord(); speakText(spoken);
+}
+function langWordUnknown(){
+  const words = getWordData(); if (!words.length) return;
+  langState.wordIndex = (langState.wordIndex+1) % words.length;
+  localStorage.setItem('meilun_langstate', JSON.stringify(langState)); updateLangWord(); speakText(words[langState.wordIndex].word);
+}
+function addUserWord(){
+  const wordInput = document.getElementById('newWord'), transInput = document.getElementById('newTranslation'), exInput = document.getElementById('newExample');
+  const word = sanitizeInput(wordInput.value, 60), translation = sanitizeInput(transInput.value, 60);
+  if (!word || !translation) return;
+  const existing = userWords.filter(w => w.language === langState.language && w.theme === langState.theme);
+  if (existing.length >= 10) return;
+  userWords.push({ language: langState.language, theme: langState.theme, word, translation, example: sanitizeInput(exInput.value, 140) });
+  localStorage.setItem('meilun_userWords', JSON.stringify(userWords));
+  wordInput.value=''; transInput.value=''; exInput.value='';
+  updateLangWord(); renderUserWords(); updateUI();
+}
+function renderUserWords(){
+  const container = document.getElementById('userWordsList'); if (!container) return;
+  const words = userWords.filter(w => w.language === langState.language && w.theme === langState.theme);
+  if (!words.length){ container.innerHTML = '<div style="color:rgba(255,255,255,0.15);font-size:12px;">No custom words added.</div>'; return; }
+  container.innerHTML = '';
+  words.forEach((w) => {
+    const realIndex = userWords.indexOf(w);
+    const div = document.createElement('div'); div.className = 'word-item';
+    const span = document.createElement('span');
+    span.textContent = w.word + ' — ' + w.translation + (w.example ? ' — "' + w.example + '"' : '');
+    const del = document.createElement('button'); del.className='del'; del.setAttribute('aria-label','Remove'); del.innerHTML='<svg class="icon-inline" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    del.onclick = () => removeUserWord(realIndex);
+    div.appendChild(span); div.appendChild(del); container.appendChild(div);
+  });
+}
+function removeUserWord(index){
+  userWords.splice(index,1);
+  localStorage.setItem('meilun_userWords', JSON.stringify(userWords));
+  renderUserWords(); updateLangWord(); updateUI();
+}
+function setStudyMode(m){
+  studyMode = m;
+  document.querySelectorAll('#studyModeChips .sub-chip').forEach(c => c.classList.toggle('active', c.dataset.mode === m));
+}
+function setStudyExam(e){
+  document.getElementById('studyTopic').dataset.exam = e;
+  document.querySelectorAll('#studyExamChips .sub-chip').forEach(c => c.classList.toggle('active', c.dataset.exam === e));
+}
+// ===== ВСПОМОГАТЕЛЬНЫЕ =====
+function addChatBubble(container, text, kind, imageDataUrl){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (kind || 'ai');
+  const label = document.createElement('span'); label.className = 'label'; label.textContent = kind === 'user' ? 'You' : 'AI';
+  div.appendChild(label);
+  if (imageDataUrl){
+    const img = document.createElement('img');
+    img.src = imageDataUrl; img.style.cssText = 'max-width:140px;max-height:140px;border-radius:8px;display:block;margin:4px 0;';
+    div.appendChild(img);
+  }
+  const body = document.createElement('span'); body.textContent = text;
+  div.appendChild(body);
+  div.onclick = () => copyToClipboard(text);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function copyToClipboard(text){
+  if (navigator.clipboard){ navigator.clipboard.writeText(text).then(showCopyToast).catch(()=>{}); }
+}
+function showCopyToast(){
+  const toast = document.getElementById('copyToast'); if (!toast) return;
+  toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000);
+}
+function showFeedback(){ document.getElementById('feedbackOverlay').classList.add('show'); }
+function closeFeedback(){ document.getElementById('feedbackOverlay').classList.remove('show'); }
+function clearChat(chatId){
+  const container = document.getElementById(chatId); if (!container) return;
+  const t = getLang(); container.innerHTML = '';
+  addChatBubble(container, t.aiHello || 'Hello! Ask me anything.', 'ai');
+}
+// ===== COOKIES (real browser cookies, not localStorage — genuine consent) =====
+function setCookie(name, value, days){
+  const maxAge = days * 24 * 60 * 60;
+  document.cookie = name + '=' + encodeURIComponent(value) + '; max-age=' + maxAge + '; path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+}
+function getCookie(name){
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.$?*|{}()[\]\\/+^]/g,'\\$&') + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+function deleteCookie(name){ document.cookie = name + '=; max-age=0; path=/'; }
+function acceptCookies(){
+  setCookie('meilun_cookie_consent', 'accepted', 365);
+  setCookie('meilun_session_lang', currentLang, 365);
+  const b = document.getElementById('cookieConsent'); if (b){ b.classList.add('hidden'); setTimeout(()=>b.style.display='none',400); }
+}
+function declineCookies(){
+  setCookie('meilun_cookie_consent', 'declined', 365);
+  deleteCookie('meilun_session_lang');
+  const b = document.getElementById('cookieConsent'); if (b){ b.classList.add('hidden'); setTimeout(()=>b.style.display='none',400); }
+}
+// ===== API =====
+async function callChatAPI(model, prompt, imageBase64){
+  const payload = { model, prompt: sanitizeInput(prompt, 1000), language: currentLang, userId: currentUser ? currentUser.id : 'anon' };
+  if (imageBase64) payload.image = imageBase64;
+  const response = await fetch(API_BASE + '/api/chat', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if (!response.ok) throw new Error('HTTP ' + response.status);
+  return response.json();
+}
+// ===== АВТОРИЗАЦИЯ (Supabase Auth: email/пароль + GitHub OAuth) =====
+async function handleLogin(ev){
+  if (ev) ev.preventDefault();
+  const t = getLang();
+  const errorEl = document.getElementById('loginError');
+  errorEl.style.display = 'none';
+  if (!supabaseReady){ errorEl.textContent = t.errorAuthUnavailable || 'Sign-in is temporarily unavailable. Please try again later.'; errorEl.style.display='block'; return false; }
+  const email = sanitizeInput(document.getElementById('loginEmail').value, 254).toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password){ errorEl.textContent = t.errorFillFields; errorEl.style.display='block'; return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errorEl.textContent = t.errorEmailInvalid; errorEl.style.display='block'; return false; }
+  const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (submitBtn) submitBtn.disabled = false;
+  if (error){ errorEl.textContent = t.errorInvalidLogin || error.message; errorEl.style.display='block'; return false; }
+  if (!data.session){ errorEl.textContent = t.errorEmailNotConfirmed || 'Please confirm your email first — check your inbox.'; errorEl.style.display='block'; return false; }
+  await syncCurrentUser(data.user);
+  showPage('profile');
+  return false;
+}
+async function handleRegister(ev){
+  if (ev) ev.preventDefault();
+  const t = getLang();
+  const errorEl = document.getElementById('regError');
+  errorEl.style.display = 'none';
+  if (!supabaseReady){ errorEl.textContent = t.errorAuthUnavailable || 'Registration is temporarily unavailable. Please try again later.'; errorEl.style.display='block'; return false; }
+  const name = sanitizeInput(document.getElementById('regName').value, 40);
+  const email = sanitizeInput(document.getElementById('regEmail').value, 254).toLowerCase();
+  const password = document.getElementById('regPassword').value;
+  if (!name || !email || !password){ errorEl.textContent = t.errorFillFields; errorEl.style.display='block'; return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errorEl.textContent = t.errorEmailInvalid; errorEl.style.display='block'; return false; }
+  if (password.length < 8){ errorEl.textContent = t.errorPasswordShort; errorEl.style.display='block'; return false; }
+  const submitBtn = document.querySelector('#registerForm button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
+  const { data, error } = await supabaseClient.auth.signUp({ email, password, options: { data: { name } } });
+  if (submitBtn) submitBtn.disabled = false;
+  if (error){ errorEl.textContent = error.message === 'User already registered' ? t.errorUserExists : error.message; errorEl.style.display='block'; return false; }
+  if (data.user && !data.session){
+    errorEl.style.color = '#4caf50';
+    errorEl.textContent = t.infoConfirmEmail || 'Account created! Check your email to confirm it before signing in.';
+    errorEl.style.display = 'block';
+    document.getElementById('registerForm').reset();
+    return false;
+  }
+  await syncCurrentUser(data.user);
+  showPage('profile');
+  return false;
+}
+async function handleGitHubLogin(){
+  if (!supabaseReady){ alert(getLang().errorAuthUnavailable || 'Sign-in is temporarily unavailable. Please try again later.'); return; }
+  const { error } = await supabaseClient.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.href } });
+  if (error) alert(error.message);
+}
+async function handleLogout(){
+  if (supabaseReady) await supabaseClient.auth.signOut();
+  currentUser = null;
+  showPage('home');
+}
+async function syncCurrentUser(user){
+  if (!user){ currentUser = null; updateUI(); return; }
+  currentUser = {
+    id: user.id,
+    name: (user.user_metadata && (user.user_metadata.name || user.user_metadata.user_name)) || (user.email ? user.email.split('@')[0] : 'User'),
+    email: user.email || '',
+    registered: user.created_at || new Date().toISOString()
+  };
+  updateUI();
+}
+if (supabaseReady){
+  supabaseClient.auth.onAuthStateChange((_event, session) => { syncCurrentUser(session ? session.user : null); });
+}
+function selectPlan(plan){
+  selectedPlan = plan;
+  localStorage.setItem('meilun_plan', plan);
+  ['Free','Pro','Ultra'].forEach(p => {
+    const btn = document.getElementById('planBtn'+p);
+    if (btn) btn.textContent = (p.toLowerCase() === plan) ? (getLang().currentPlan || 'Current') : (getLang().upgrade || 'Upgrade');
+  });
+  updateUI();
+}
+function requestUpgrade(plan){
+  const notice = document.getElementById('planNotice');
+  if (!notice) return;
+  notice.textContent = getLang().billingNotConnected || 'Payments aren\u2019t connected yet, so upgrades aren\u2019t available. This plan will be enabled once billing is set up.';
+  notice.style.display = 'block';
+}
+// ===== ОСНОВНОЙ ЧАТ =====
+async function sendMessage(){
+  const input = document.getElementById('chatInput');
+  const text = sanitizeInput(input.value, 1000);
+  const t = getLang();
+  const image = pendingChatImage;
+  if ((!text && !image) || isProcessing) return;
+  const limit = selectedPlan === 'ultra' ? Infinity : selectedPlan === 'pro' ? 500 : 100;
+  if (messagesCount >= limit){ addChatBubble(document.getElementById('chatArea'), t.errorLimitReached, 'error'); return; }
+  const chat = document.getElementById('chatArea');
+  addChatBubble(chat, text || '(image)', 'user', image);
+  input.value = '';
+  pendingChatImage = null;
+  const preview = document.getElementById('chatImagePreview'); if (preview){ preview.style.display='none'; preview.innerHTML=''; }
+  document.getElementById('chatImageFile').value = '';
+  messagesCount++; localStorage.setItem('meilun_messages', String(messagesCount));
+  isProcessing = true;
+  const sendBtn = document.getElementById('sendBtn'); sendBtn.disabled = true;
+  const typing = document.createElement('div'); typing.className = 'typing'; typing.textContent = t.uiThinking || 'AI is thinking...';
+  chat.appendChild(typing); chat.scrollTop = chat.scrollHeight;
+  try {
+    const data = await callChatAPI(currentModel, text || 'Describe this image.', image);
+    typing.remove();
+    if (data.error) addChatBubble(chat, data.error, 'error');
+    else { const imgUrl = extractImageUrl(data.reply); addChatBubble(chat, data.reply || '...', 'ai', imgUrl); if (!imgUrl) speakText(data.reply || ''); }
+  } catch (err) {
+    typing.remove();
+    addChatBubble(chat, t.uiConnectionError || 'Connection error. Please try again.', 'error');
+  }
+  isProcessing = false; sendBtn.disabled = false; updateUI();
+  const luniContainer = document.getElementById('luniContainer');
+  if (luniContainer) luniContainer.classList.add('familiar');
+}
+// ===== ГОЛОС LUNI =====
+const speechLangMap = { 'Русский':'ru-RU','English':'en-US','Español':'es-ES','Francais':'fr-FR','Deutsch':'de-DE','Italiano':'it-IT','Português':'pt-PT','日本語':'ja-JP','한국어':'ko-KR','中文':'zh-CN' };
+const femaleVoiceHints = /female|zira|aria|samantha|milena|irina|elena|monica|paulina|helena|amelie|audrey|celine|marie|anna|petra|katja|alice|federica|elsa|luciana|joana|kyoko|o-ren|haruka|yuna|ting-ting|mei-jia|sin-ji|google.*(female|us english)/i;
+function pickVoice(langCode){
+  const voices = window.speechSynthesis.getVoices();
+  const base = langCode.slice(0,2);
+  const exact = voices.filter(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+  const sameLang = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(base));
+  const pool = exact.length ? exact : sameLang;
+  return pool.find(v => femaleVoiceHints.test(v.name)) || pool[0] || null;
+}
+function speakText(text){
+  if (!window.speechSynthesis || !text) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  const langCode = speechLangMap[currentLang] || 'en-US';
+  const voice = pickVoice(langCode);
+  if (voice) utter.voice = voice;
+  utter.lang = langCode;
+  utter.rate = 0.92; utter.pitch = 1.0; utter.volume = 1;
+  const aura = document.getElementById('luniAura'); const label = document.getElementById('luniLabel');
+  utter.onstart = () => { if (aura) aura.classList.add('speaking'); if (label){ label.textContent = getLang().uiSpeaking || 'Speaking...'; label.dataset.speaking='true'; } };
+  const reset = () => { if (aura) aura.classList.remove('speaking'); if (label){ delete label.dataset.speaking; label.textContent = getLang().tapToSpeak || 'Tap to speak'; } };
+  utter.onend = reset; utter.onerror = reset;
+  window.speechSynthesis.speak(utter);
+}
+function startListenInto(inputId){
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const r = getSpeechRecognition();
+  if (!r){ input.placeholder = getLang().uiSpeechNotSupported || 'Speech recognition not supported'; return; }
+  const originalPlaceholder = input.placeholder;
+  input.placeholder = getLang().uiListening || 'Listening...';
+  r.onresult = (event) => { input.value = event.results[0][0].transcript; input.placeholder = originalPlaceholder; input.focus(); };
+  r.onerror = () => { input.placeholder = originalPlaceholder; };
+  r.onend = () => { input.placeholder = originalPlaceholder; };
+  try { r.start(); } catch(e){ input.placeholder = originalPlaceholder; }
+}
+function handleChatImageSelect(event){
+  const file = event.target.files && event.target.files[0];
+  const preview = document.getElementById('chatImagePreview');
+  if (!file){ pendingChatImage = null; preview.style.display='none'; preview.innerHTML=''; return; }
+  if (!/^image\/(png|jpeg|webp)$/.test(file.type)){ alert('Only PNG, JPEG or WEBP images are supported.'); event.target.value=''; return; }
+  if (file.size > 4 * 1024 * 1024){ alert('Image must be under 4MB.'); event.target.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    pendingChatImage = reader.result;
+    preview.style.display = 'flex';
+    preview.style.cssText = 'display:flex;align-items:center;gap:8px;';
+    preview.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = pendingChatImage; img.style.cssText = 'height:48px;border-radius:8px;';
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = getLang().uiRemoveImage || 'Remove image';
+    removeBtn.type = 'button';
+    removeBtn.style.cssText = 'background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border-radius:12px;padding:4px 10px;font-size:10px;cursor:pointer;';
+    removeBtn.onclick = () => { pendingChatImage = null; document.getElementById('chatImageFile').value=''; preview.style.display='none'; preview.innerHTML=''; };
+    preview.appendChild(img); preview.appendChild(removeBtn);
+  };
+  reader.readAsDataURL(file);
+}
+function getSpeechRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.lang = speechLangMap[currentLang] || 'en-US';
+  r.continuous = false; r.interimResults = false;
+  return r;
+}
+function startListening(){
+  const aura = document.getElementById('luniAura'); const label = document.getElementById('luniLabel');
+  const t = getLang();
+  if (recognition){ try { recognition.stop(); } catch(e){} recognition = null; return; }
+  recognition = getSpeechRecognition();
+  if (!recognition){ addChatBubble(document.getElementById('chatArea'), t.uiSpeechNotSupported || 'Speech recognition is not supported in this browser.', 'error'); return; }
+  recognition.onstart = () => { aura.classList.add('speaking'); label.textContent = t.uiListening || 'Listening...'; label.dataset.speaking='true'; };
+  recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput){ chatInput.value = text; sendMessage(); }
+  };
+  const reset = () => { aura.classList.remove('speaking'); delete label.dataset.speaking; label.textContent = t.tapToSpeak || 'Tap to speak'; recognition = null; };
+  recognition.onerror = reset; recognition.onend = reset;
+  try { recognition.start(); } catch(e){}
+}
+function startVoiceChat(){
+  const aura = document.getElementById('voiceLuniAura'); const status = document.getElementById('voiceStatus');
+  const chat = document.getElementById('voiceChatArea'); const t = getLang();
+  if (recognition){ try { recognition.stop(); } catch(e){} recognition = null; aura.classList.remove('speaking'); status.textContent = t.tapToSpeak; return; }
+  recognition = getSpeechRecognition();
+  if (!recognition){ addChatBubble(chat, t.uiSpeechNotSupported || 'Speech recognition is not supported in this browser.', 'error'); return; }
+  aura.classList.add('speaking'); status.textContent = t.uiListening || 'Listening...';
+  recognition.onresult = async (event) => {
+    const text = event.results[0][0].transcript;
+    aura.classList.remove('speaking'); status.textContent = t.uiProcessing || 'Processing...';
+    addChatBubble(chat, text, 'user');
+    const typing = document.createElement('div'); typing.className='typing'; typing.textContent=t.uiThinking || 'AI is thinking...'; chat.appendChild(typing);
+    try {
+      const data = await callChatAPI(currentModel, text);
+      typing.remove();
+      if (data.error) addChatBubble(chat, data.error, 'error');
+      else { const imgUrl = extractImageUrl(data.reply); addChatBubble(chat, data.reply || '...', 'ai', imgUrl); if (!imgUrl) speakText(data.reply || ''); }
+    } catch(e){ typing.remove(); addChatBubble(chat, t.uiConnectionError || 'Connection error.', 'error'); }
+    status.textContent = t.tapToSpeak;
+  };
+  const reset = () => { aura.classList.remove('speaking'); if (status.textContent === (t.uiListening || 'Listening...')) status.textContent = t.tapToSpeak; recognition = null; };
+  recognition.onerror = reset; recognition.onend = reset;
+  try { recognition.start(); } catch(e){}
+}
+// ===== ГЕНЕРАЦИЯ =====
+async function generateIdeaWithAI(){
+  const input = document.getElementById('ideaInput');
+  const text = sanitizeInput(input.value, 300);
+  const t = getLang();
+  const container = document.getElementById('ideaResult');
+  if (!text){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.enterTopic) + '</div>'; return; }
+  const category = input.dataset.category || 'All';
+  container.innerHTML = '<div class="typing">' + escapeHtml(t.generate) + '...</div>';
+  try {
+    const data = await callChatAPI(currentModel, 'Generate 3 creative ideas (category: ' + category + ') for: ' + text);
+    const reply = data.error ? data.error : (data.reply || t.uiNoResult);
+    container.innerHTML = '<div class="msg ai">' + escapeHtml(reply).replace(/\n/g,'<br>') + '</div>';
+  } catch(e){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.uiConnectionError || 'Connection error.') + '</div>'; }
+}
+function extractImageUrl(text){
+  if (!text) return null;
+  const match = String(text).match(/https?:\/\/[^\s"'<>]+\.(?:png|jpe?g|webp|gif)(?:\?[^\s"'<>]*)?/i);
+  return match ? match[0] : null;
+}
+async function generatePhotoWithAI(){
+  const descEl = document.getElementById('photoDesc');
+  const desc = sanitizeInput(descEl.value, 1000);
+  const t = getLang();
+  const container = document.getElementById('photoResult');
+  const limit = selectedPlan === 'ultra' ? 50 : selectedPlan === 'pro' ? 20 : 5;
+  if (!desc){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.describeImage) + '</div>'; return; }
+  if (generationsCount >= limit){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.errorLimitReached) + '</div>'; return; }
+  const style = descEl.dataset.style || 'Realism';
+  const format = descEl.dataset.format || '16:9 Landscape';
+  container.innerHTML = '<div class="typing">' + escapeHtml(t.generatePhoto) + '...</div>';
+  try {
+    const data = await callChatAPI(currentImageModel, desc + ' — style: ' + style + ', format: ' + format);
+    if (data.error){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(data.error) + '</div>'; return; }
+    const fallbackImg = !data.imageUrl && !data.imageBase64 ? extractImageUrl(data.reply) : null;
+    if (data.imageUrl || data.imageBase64 || fallbackImg){
+      container.innerHTML = '';
+      const src = data.imageUrl || data.imageBase64 || fallbackImg;
+      const img = document.createElement('img');
+      img.src = src; img.alt = desc; img.style.cssText = 'max-width:100%;border-radius:12px;display:block;';
+      const actions = document.createElement('div');
+      actions.style.cssText = 'display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;';
+      const dl = document.createElement('a');
+      dl.href = src; dl.download = 'meilun-' + Date.now() + '.png'; dl.textContent = getLang().uiDownload || 'Download';
+      dl.style.cssText = 'background:#7c3aed;color:#fff;border-radius:16px;padding:8px 16px;font-size:12px;text-decoration:none;';
+      const openLink = document.createElement('a');
+      openLink.href = src; openLink.target = '_blank'; openLink.rel = 'noopener noreferrer'; openLink.textContent = getLang().uiOpenFull || 'Open full size';
+      openLink.style.cssText = 'background:rgba(255,255,255,0.05);color:#fff;border-radius:16px;padding:8px 16px;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,0.08);';
+      actions.appendChild(dl); actions.appendChild(openLink);
+      container.appendChild(img); container.appendChild(actions);
+    } else {
+      container.innerHTML = '<div class="msg ai">' + escapeHtml(data.reply || 'No result') + '</div>';
+    }
+    generationsCount++; localStorage.setItem('meilun_generations', String(generationsCount)); updateUI();
+  } catch(e){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.uiConnectionError || 'Connection error.') + '</div>'; }
+}
+async function generateStudy(){
+  const topicEl = document.getElementById('studyTopic');
+  const topic = sanitizeInput(topicEl.value, 300) || 'General';
+  const t = getLang();
+  const container = document.getElementById('studyResult');
+  const user = topicEl.dataset.user || 'Student', subject = topicEl.dataset.subject || 'Mathematics', exam = topicEl.dataset.exam || '';
+  container.innerHTML = '<div class="typing">' + escapeHtml(t.generate) + '...</div>';
+  try {
+    let prompt = 'Explain "' + topic + '" in ' + subject + ' for a ' + user + ' in ' + studyMode + ' mode.';
+    if (exam) prompt += ' Focus on the ' + exam + ' exam format.';
+    const data = await callChatAPI(currentModel, prompt);
+    const reply = data.error ? data.error : (data.reply || t.uiNoResult);
+    container.innerHTML = '<div class="msg ai">' + escapeHtml(reply).replace(/\n/g,'<br>') + '</div>';
+  } catch(e){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.uiConnectionError || 'Connection error.') + '</div>'; }
+}
+async function generateCodeWithAI(){
+  const taskEl = document.getElementById('codeTask');
+  const task = sanitizeInput(taskEl.value, 1000);
+  const t = getLang();
+  const container = document.getElementById('codeResult');
+  if (!task){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.describeTask) + '</div>'; return; }
+  const mode = taskEl.dataset.mode || 'Code Generation', lang = taskEl.dataset.lang || 'Python';
+  container.innerHTML = '<div class="typing">' + escapeHtml(t.generate) + '...</div>';
+  try {
+    const data = await callChatAPI(currentModel, mode + ' in ' + lang + ' for: ' + task);
+    const reply = data.error ? data.error : (data.reply || t.uiNoResult);
+    container.innerHTML = '<pre style="white-space:pre-wrap;font-family:monospace;font-size:12px;color:#e0e0e0;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;">' + escapeHtml(reply) + '</pre>';
+  } catch(e){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.uiConnectionError || 'Connection error.') + '</div>'; }
+}
+async function translateWithAI(){
+  const inputEl = document.getElementById('translateInput');
+  const text = sanitizeInput(inputEl.value, 1000);
+  const t = getLang();
+  const container = document.getElementById('translateResult');
+  if (!text){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.translatePlaceholder) + '</div>'; return; }
+  const from = inputEl.dataset.from || 'English', to = inputEl.dataset.to || 'Russian';
+  container.innerHTML = '<div class="typing">' + escapeHtml(t.translate) + '...</div>';
+  try {
+    const data = await callChatAPI(currentModel, 'Translate from ' + from + ' to ' + to + ' (return only the translation): ' + text);
+    const reply = data.error ? data.error : (data.reply || t.uiNoResult);
+    container.innerHTML = '<div class="msg ai">' + escapeHtml(reply).replace(/\n/g,'<br>') + '</div>';
+  } catch(e){ container.innerHTML = '<div style="color:#f44336;font-size:12px;">' + escapeHtml(t.uiConnectionError || 'Connection error.') + '</div>'; }
+}
+// ===== ЧАТЫ ФУНКЦИЙ =====
+async function sendGenericChat(inputId, areaId, prefix){
+  const input = document.getElementById(inputId);
+  const text = sanitizeInput(input.value, 1000);
+  if (!text) return;
+  const container = document.getElementById(areaId);
+  addChatBubble(container, text, 'user');
+  input.value = '';
+  const t = getLang();
+  const typing = document.createElement('div'); typing.className='typing'; typing.textContent=t.uiThinking || 'AI is thinking...';
+  container.appendChild(typing); container.scrollTop = container.scrollHeight;
+  try {
+    const data = await callChatAPI(currentModel, prefix + text);
+    typing.remove();
+    addChatBubble(container, data.error ? data.error : (data.reply || t.uiNoResult), data.error ? 'error' : 'ai');
+  } catch(e){ typing.remove(); addChatBubble(container, t.uiConnectionError || 'Connection error.', 'error'); }
+}
+function sendIdeaChat(){ sendGenericChat('ideaChatInput','ideaChatArea','Discuss this idea: '); }
+function sendPhotoChat(){ sendGenericChat('photoChatInput','photoChatArea','Photo generation question: '); }
+function sendStudyChat(){ sendGenericChat('studyChatInput','studyChatArea','Study question: '); }
+function sendCodeChat(){ sendGenericChat('codeChatInput','codeChatArea','Coding help: '); }
+function sendTransChat(){ sendGenericChat('transChatInput','transChatArea','Translation question: '); }
+function sendLangPractice(){ sendGenericChat('langChatInput','langChatArea','Correct and explain this ' + langState.language + ' sentence: '); }
+
+// ===== СОХРАНЕНИЕ / ЗАГРУЗКА =====
+function loadSavedData(){
+  const savedLang = localStorage.getItem('meilun_lang'); if (savedLang && translations[savedLang]) currentLang = savedLang;
+  const cookieLang = getCookie('meilun_session_lang'); if (cookieLang && translations[cookieLang]) currentLang = cookieLang;
+  const savedModel = localStorage.getItem('meilun_model'); if (savedModel && modelList.includes(savedModel)) currentModel = savedModel;
+  const savedImgModel = localStorage.getItem('meilun_image_model'); if (savedImgModel && imageModelList.includes(savedImgModel)) currentImageModel = savedImgModel;
+  messagesCount = parseInt(localStorage.getItem('meilun_messages')) || 0;
+  generationsCount = parseInt(localStorage.getItem('meilun_generations')) || 0;
+  try { const ls = JSON.parse(localStorage.getItem('meilun_langstate')); if (ls) Object.assign(langState, ls); } catch(e){}
+  selectedPlan = localStorage.getItem('meilun_plan') || 'free';
+  if (getCookie('meilun_cookie_consent')){ const b = document.getElementById('cookieConsent'); if (b) b.style.display = 'none'; }
+}
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+async function init(){
+  loadSavedData();
+  renderModelButtons(); renderPhotoModelButtons(); renderLangButtons(); renderLangButtonsTop();
+  renderIdeaCategories(); renderPhotoStyles(); renderPhotoFormats();
+  renderStudyUserTypes(); renderStudySubjects(); renderCodeModes(); renderCodeLanguages();
+  renderLangPracticeLangs(); renderLangPracticeLevels(); renderLangPracticeThemes();
+  renderTranslatorFrom(); renderTranslatorTo(); renderUserWords(); updateLangWord();
+  updateUI(); selectPlan(selectedPlan);
+  if (supabaseReady){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    await syncCurrentUser(session ? session.user : null);
+    if (currentUser) updateUI();
+  }
+  if (window.speechSynthesis){ window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices(); }
+  document.getElementById('sendBtn')?.addEventListener('click', sendMessage);
+  document.getElementById('chatInput')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+  document.getElementById('feedbackOverlay')?.addEventListener('click', function(e){ if (e.target === this) closeFeedback(); });
+}
+document.addEventListener('DOMContentLoaded', init);
+window.showPage=showPage; window.showFeature=showFeature; window.scrollToChat=scrollToChat;
+window.handleLogin=handleLogin; window.handleRegister=handleRegister; window.handleLogout=handleLogout; window.handleGitHubLogin=handleGitHubLogin;
+window.generateIdeaWithAI=generateIdeaWithAI; window.generatePhotoWithAI=generatePhotoWithAI;
+window.generateStudy=generateStudy; window.generateCodeWithAI=generateCodeWithAI; window.translateWithAI=translateWithAI;
+window.sendIdeaChat=sendIdeaChat; window.sendPhotoChat=sendPhotoChat; window.sendStudyChat=sendStudyChat;
+window.sendCodeChat=sendCodeChat; window.sendLangPractice=sendLangPractice; window.sendTransChat=sendTransChat;
+window.sendMessage=sendMessage; window.startListening=startListening; window.startVoiceChat=startVoiceChat;
+window.setStudyMode=setStudyMode; window.setStudyExam=setStudyExam; window.langWordKnown=langWordKnown; window.langWordUnknown=langWordUnknown;
+window.clearChat=clearChat; window.showFeedback=showFeedback; window.closeFeedback=closeFeedback;
+window.selectPlan=selectPlan; window.requestUpgrade=requestUpgrade; window.addUserWord=addUserWord; window.removeUserWord=removeUserWord;
+window.acceptCookies=acceptCookies; window.declineCookies=declineCookies;
+</script>
+</body>
+</html>

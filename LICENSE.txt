@@ -1,0 +1,13 @@
+Copyright (c) 2026 Lina. All rights reserved.
+
+This source code is the property of the copyright holder.
+
+No part of this code may be reproduced, distributed, or transmitted
+in any form or by any means, including photocopying, recording, or
+other electronic or mechanical methods, without the prior written
+permission of the copyright holder.
+
+Any unauthorized use, copying, modification, or distribution of this
+code is strictly prohibited.
+
+For permission requests, contact via GitHub.
